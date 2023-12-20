@@ -11,7 +11,10 @@ public class RegionNames {
     public static final String DICE_4 = "dice-4";
     public static final String DICE_5 = "dice-5";
     public static final String DICE_6 = "dice-6";
+    public static final String DICE_X = "dice-x";
+    public static final String DICE_SETT = "dice-settings";
     public static final String LINE = "line";
+
     private RegionNames() {
     }
 }

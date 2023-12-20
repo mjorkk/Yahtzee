@@ -6,99 +6,133 @@ filter: Nearest, Nearest
 repeat: none
 dice-1
   rotate: false
-  xy: 910, 914
+  xy: 804, 564
   size: 94, 94
   orig: 94, 94
   offset: 0, 0
   index: -1
 dice-2
   rotate: false
-  xy: 2, 98
+  xy: 910, 671
   size: 94, 94
   orig: 94, 94
   offset: 0, 0
   index: -1
 dice-3
   rotate: false
-  xy: 108, 205
+  xy: 804, 468
   size: 94, 94
   orig: 94, 94
   offset: 0, 0
   index: -1
 dice-4
   rotate: false
-  xy: 214, 312
+  xy: 910, 575
   size: 94, 94
   orig: 94, 94
   offset: 0, 0
   index: -1
 dice-5
   rotate: false
-  xy: 804, 700
+  xy: 900, 479
   size: 94, 94
   orig: 94, 94
   offset: 0, 0
   index: -1
 dice-6
   rotate: false
-  xy: 910, 818
+  xy: 900, 383
   size: 94, 94
   orig: 94, 94
   offset: 0, 0
   index: -1
 line
   rotate: false
-  xy: 310, 398
+  xy: 2, 2
   size: 117, 8
   orig: 117, 8
   offset: 0, 0
   index: -1
+menu-background
+  rotate: false
+  xy: 2, 12
+  size: 1007, 365
+  orig: 1007, 365
+  offset: 0, 0
+  index: -1
 shuffle-1
   rotate: false
-  xy: 2, 301
+  xy: 804, 874
   size: 104, 105
   orig: 104, 105
   offset: 0, 0
   index: -1
 shuffle-2
   rotate: false
-  xy: 804, 903
+  xy: 804, 767
   size: 104, 105
   orig: 104, 105
   offset: 0, 0
   index: -1
 shuffle-3
   rotate: false
-  xy: 2, 194
+  xy: 910, 874
   size: 104, 105
   orig: 104, 105
   offset: 0, 0
   index: -1
 shuffle-4
   rotate: false
-  xy: 108, 301
+  xy: 804, 660
   size: 104, 105
   orig: 104, 105
   offset: 0, 0
   index: -1
 shuffle-5
   rotate: false
-  xy: 804, 796
+  xy: 910, 767
   size: 104, 105
   orig: 104, 105
   offset: 0, 0
   index: -1
-shuffle-6
+simple-background
+  rotate: false
+  xy: 2, 379
+  size: 800, 600
+  orig: 800, 600
+  offset: 0, 0
+  index: -1
+
+gameplay2.png
+size: 1024, 512
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+dice-settings
+  rotate: false
+  xy: 2, 98
+  size: 94, 94
+  orig: 94, 94
+  offset: 0, 0
+  index: -1
+dice-x
   rotate: false
   xy: 2, 2
   size: 94, 94
   orig: 94, 94
   offset: 0, 0
   index: -1
-simple-background
+shuffle-6
   rotate: false
-  xy: 2, 408
-  size: 800, 600
-  orig: 800, 600
+  xy: 98, 98
+  size: 94, 94
+  orig: 94, 94
+  offset: 0, 0
+  index: -1
+table-background
+  rotate: false
+  xy: 2, 194
+  size: 1008, 306
+  orig: 1008, 306
   offset: 0, 0
   index: -1

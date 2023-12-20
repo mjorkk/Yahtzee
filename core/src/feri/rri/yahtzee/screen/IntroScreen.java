@@ -22,7 +22,7 @@ import feri.rri.yahtzee.config.GameConfig;
 
 public class IntroScreen extends ScreenAdapter {
 
-    public static final float INTRO_DURATION_IN_SEC = 3f;   // duration of the (intro) animation
+    public static final float INTRO_DURATION_IN_SEC = 1f;   // duration of the (intro) animation
 
     private final Yahtzee game;
     private final AssetManager assetManager;
@@ -78,7 +78,7 @@ public class IntroScreen extends ScreenAdapter {
 
 //         go to the MenuScreen after INTRO_DURATION_IN_SEC seconds
         if (duration > INTRO_DURATION_IN_SEC) {
-//            game.setScreen(new MenuScreen(game));
+            game.setScreen(new MenuScreen(game));
         }
 
         stage.act(delta);

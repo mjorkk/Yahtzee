@@ -1,12 +1,54 @@
 
 uiskin.png
-size: 512, 256
+size: 1024, 256
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
+beige-dark
+  rotate: false
+  xy: 518, 100
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+beige-light
+  rotate: false
+  xy: 763, 195
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+dark
+  rotate: false
+  xy: 247, 58
+  size: 37, 37
+  orig: 37, 37
+  offset: 0, 0
+  index: -1
 default
   rotate: false
+  xy: 2, 97
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+default-round
+  rotate: false
   xy: 2, 2
+  size: 243, 93
+  orig: 243, 93
+  offset: 0, 0
+  index: -1
+default-round-down
+  rotate: false
+  xy: 518, 132
+  size: 243, 93
+  orig: 243, 93
+  offset: 0, 0
+  index: -1
+font-light
+  rotate: false
+  xy: 260, 97
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
