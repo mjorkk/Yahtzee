@@ -1,0 +1,55 @@
+
+gameplay.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+dice-1
+  rotate: false
+  xy: 2, 74
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+dice-2
+  rotate: false
+  xy: 804, 676
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+dice-3
+  rotate: false
+  xy: 2, 2
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+dice-4
+  rotate: false
+  xy: 74, 74
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+dice-5
+  rotate: false
+  xy: 804, 604
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+dice-6
+  rotate: false
+  xy: 876, 676
+  size: 70, 70
+  orig: 70, 70
+  offset: 0, 0
+  index: -1
+simple-background
+  rotate: false
+  xy: 2, 146
+  size: 800, 600
+  orig: 800, 600
+  offset: 0, 0
+  index: -1
