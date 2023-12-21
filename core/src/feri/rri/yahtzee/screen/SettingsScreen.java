@@ -10,12 +10,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -39,6 +41,8 @@ public class SettingsScreen extends ScreenAdapter {
     private ButtonGroup<CheckBox> checkBoxGroup;
     private CheckBox checkBoxX;
     private CheckBox checkBoxO;
+    private Skin skin;
+    private TextureAtlas gameplayAtlas;
 
     public SettingsScreen(Yahtzee game) {
         this.game = game;
@@ -48,9 +52,21 @@ public class SettingsScreen extends ScreenAdapter {
     @Override
     public void show() {
         viewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
+        skin = assetManager.get(AssetDescriptors.UI_SKIN);
+        gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY);
         stage = new Stage(viewport, game.getBatch());
 
         stage.addActor(createUi());
+        Drawable quitButtonDrawable = new TextureRegionDrawable(gameplayAtlas.findRegion(RegionNames.LABEL_SETTINGS));
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.background = quitButtonDrawable;
+        Image settingsImage = new Image(quitButtonDrawable);
+
+        // Set the position of the image to be centered at the top of the stage
+        settingsImage.setSize(300f,60f);
+        settingsImage.setPosition(viewport.getWorldWidth()/ 2 - settingsImage.getWidth() / 2, viewport.getWorldHeight() - settingsImage.getHeight()-30f);
+
+        stage.addActor(settingsImage);
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -80,34 +96,35 @@ public class SettingsScreen extends ScreenAdapter {
     private Actor createUi() {
         Table table = new Table();
         table.defaults().pad(20);
-
         Skin uiSkin = assetManager.get(AssetDescriptors.UI_SKIN);
         TextureAtlas gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY);
-
-        TextureRegion backgroundRegion = gameplayAtlas.findRegion(RegionNames.BACKGROUND);
+        TextureRegion backgroundRegion = gameplayAtlas.findRegion(RegionNames.PLAIN_BACKGROUND);
         table.setBackground(new TextureRegionDrawable(backgroundRegion));
 
-        ChangeListener listener = new ChangeListener() {
+        // Create checkboxes for sound and music settings
+        final CheckBox soundCheckBox = new CheckBox("Sound", uiSkin);
+        final CheckBox musicCheckBox = new CheckBox("Music", uiSkin);
+
+        soundCheckBox.setChecked(GameManager.INSTANCE.getSoundPref());
+        musicCheckBox.setChecked(GameManager.INSTANCE.getMusicPref());
+
+        soundCheckBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                CheckBox checked = checkBoxGroup.getChecked();
-                if (checked == checkBoxX) {
-                    GameManager.INSTANCE.setInitMove(CellState.X);
-                } else if (checked == checkBoxO) {
-                    GameManager.INSTANCE.setInitMove(CellState.O);
+                GameManager.INSTANCE.setSoundPref(soundCheckBox.isChecked());
+            }
+        });
+        musicCheckBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                GameManager.INSTANCE.setMusicPref(musicCheckBox.isChecked());
+                if (musicCheckBox.isChecked()) {
+                    GameManager.INSTANCE.getBackgroundMusic().play();
+                } else {
+                    GameManager.INSTANCE.getBackgroundMusic().stop();
                 }
             }
-        };
-
-        checkBoxX = new CheckBox(CellState.X.name(), uiSkin);
-        checkBoxO = new CheckBox(CellState.O.name(), uiSkin);
-
-        checkBoxX.addListener(listener);
-        checkBoxO.addListener(listener);
-
-        checkBoxGroup = new ButtonGroup<>(checkBoxX, checkBoxO);
-        checkBoxGroup.setChecked(GameManager.INSTANCE.getInitMove().name());
-
+        });
         TextButton backButton = new TextButton("Back", uiSkin);
         backButton.addListener(new ClickListener() {
             @Override
@@ -118,16 +135,14 @@ public class SettingsScreen extends ScreenAdapter {
 
         Table contentTable = new Table(uiSkin);
 
-        TextureRegion menuBackground = gameplayAtlas.findRegion(RegionNames.MENU_BACKGROUND);
+        TextureRegion menuBackground = gameplayAtlas.findRegion(RegionNames.SETTINGS_TABLE);
+
         contentTable.setBackground(new TextureRegionDrawable(menuBackground));
+        contentTable.add(soundCheckBox).row();
+        contentTable.add(musicCheckBox).row();
+        contentTable.add(backButton).width(150f).padTop(50).colspan(2);
 
-        contentTable.add(new Label("Settings", uiSkin)).padBottom(50).colspan(2).row();
-        contentTable.add(new Label("Choose init move:", uiSkin)).colspan(2).row();
-        contentTable.add(checkBoxX);
-        contentTable.add(checkBoxO).row();
-        contentTable.add(backButton).width(100).padTop(50).colspan(2);
-
-        table.add(contentTable);
+        table.add(contentTable).padTop(125f).padRight(100f).padLeft(100f);
         table.center();
         table.setFillParent(true);
         table.pack();

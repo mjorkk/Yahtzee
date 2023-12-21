@@ -4,6 +4,13 @@ size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
+background
+  rotate: false
+  xy: 2, 379
+  size: 800, 600
+  orig: 800, 600
+  offset: 0, 0
+  index: -1
 dice-1
   rotate: false
   xy: 804, 564
@@ -95,44 +102,64 @@ shuffle-5
   orig: 104, 105
   offset: 0, 0
   index: -1
-simple-background
-  rotate: false
-  xy: 2, 379
-  size: 800, 600
-  orig: 800, 600
-  offset: 0, 0
-  index: -1
 
 gameplay2.png
-size: 1024, 512
+size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
 dice-settings
   rotate: false
-  xy: 2, 98
+  xy: 804, 857
   size: 94, 94
   orig: 94, 94
   offset: 0, 0
   index: -1
 dice-x
   rotate: false
-  xy: 2, 2
+  xy: 804, 761
   size: 94, 94
   orig: 94, 94
+  offset: 0, 0
+  index: -1
+settings-label
+  rotate: false
+  xy: 2, 2
+  size: 432, 72
+  orig: 432, 72
   offset: 0, 0
   index: -1
 shuffle-6
   rotate: false
-  xy: 98, 98
+  xy: 900, 857
   size: 94, 94
   orig: 94, 94
   offset: 0, 0
   index: -1
+simple-background
+  rotate: false
+  xy: 2, 351
+  size: 800, 600
+  orig: 800, 600
+  offset: 0, 0
+  index: -1
 table-background
   rotate: false
-  xy: 2, 194
-  size: 1008, 306
-  orig: 1008, 306
+  xy: 2, 76
+  size: 1008, 273
+  orig: 1008, 273
+  offset: 0, 0
+  index: -1
+
+gameplay3.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+settings-table
+  rotate: false
+  xy: 2, 2
+  size: 513, 609
+  orig: 513, 609
   offset: 0, 0
   index: -1

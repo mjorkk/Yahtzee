@@ -3,6 +3,7 @@ package feri.rri.yahtzee.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -22,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import feri.rri.yahtzee.Yahtzee;
 import feri.rri.yahtzee.assets.AssetDescriptors;
 import feri.rri.yahtzee.assets.RegionNames;
+import feri.rri.yahtzee.common.GameManager;
 import feri.rri.yahtzee.config.GameConfig;
 
 
@@ -41,6 +43,9 @@ public class MenuScreen extends ScreenAdapter {
     public MenuScreen(Yahtzee game) {
         this.game = game;
         assetManager = game.getAssetManager();
+        assetManager.load(AssetDescriptors.MENU_MUSIC);
+        assetManager.finishLoading();
+        GameManager.INSTANCE.setBackgroundMusic(assetManager.get(AssetDescriptors.MENU_MUSIC));
     }
 
     @Override
@@ -81,6 +86,9 @@ public class MenuScreen extends ScreenAdapter {
         stage.addActor(quitButton);
         stage.addActor(settingsButton);
         Gdx.input.setInputProcessor(stage);
+        if (GameManager.INSTANCE.getMusicPref()) {
+            GameManager.INSTANCE.getBackgroundMusic().play();
+        }
     }
 
     @Override
@@ -91,7 +99,14 @@ public class MenuScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
 //        ScreenUtils.clear(0f, 0f, 0f, 0f);
-
+        if (GameManager.INSTANCE.getMusicPref()) {
+            GameManager.INSTANCE.getBackgroundMusic().setLooping(true);
+            GameManager.INSTANCE.getBackgroundMusic().setVolume(0.2f);
+            GameManager.INSTANCE.getBackgroundMusic().play();
+        }
+        else {
+            GameManager.INSTANCE.getBackgroundMusic().stop();
+        }
         stage.act(delta);
         stage.draw();
     }
@@ -117,6 +132,7 @@ public class MenuScreen extends ScreenAdapter {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameManager.INSTANCE.getBackgroundMusic().stop();
                 game.setScreen(new GameScreen(game));
             }
         });

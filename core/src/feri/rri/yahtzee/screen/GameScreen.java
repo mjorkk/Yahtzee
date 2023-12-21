@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -45,12 +46,15 @@ public class GameScreen extends ScreenAdapter {
     private Skin skin;
     private TextureAtlas gameplayAtlas;
 
-    private CellState move = GameManager.INSTANCE.getInitMove();
     private Image infoImage;
 
+    private Music backgroundMusic;
     public GameScreen(Yahtzee game) {
         this.game = game;
         assetManager = game.getAssetManager();
+        assetManager.load(AssetDescriptors.GAME_MUSIC);
+        assetManager.finishLoading();
+        backgroundMusic = assetManager.get(AssetDescriptors.MENU_MUSIC);
     }
 
     @Override
@@ -69,6 +73,11 @@ public class GameScreen extends ScreenAdapter {
         hudStage.addActor(createBackButton());
 
         Gdx.input.setInputProcessor(new InputMultiplexer(gameplayStage, hudStage));
+        if (GameManager.INSTANCE.getMusicPref()) {
+            backgroundMusic.setLooping(true);
+            backgroundMusic.setVolume(0.2f);
+            backgroundMusic.play();
+        }
     }
 
     @Override

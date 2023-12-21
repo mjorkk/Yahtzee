@@ -6,49 +6,63 @@ filter: Nearest, Nearest
 repeat: none
 beige-dark
   rotate: false
-  xy: 518, 100
+  xy: 518, 121
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 beige-light
   rotate: false
-  xy: 763, 195
+  xy: 478, 86
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
+check-off
+  rotate: false
+  xy: 247, 2
+  size: 114, 114
+  orig: 114, 114
+  offset: 0, 0
+  index: -1
+check-on
+  rotate: false
+  xy: 363, 2
+  size: 113, 114
+  orig: 113, 114
+  offset: 0, 0
+  index: -1
 dark
   rotate: false
-  xy: 247, 58
+  xy: 763, 209
   size: 37, 37
   orig: 37, 37
   offset: 0, 0
   index: -1
 default
   rotate: false
-  xy: 2, 97
+  xy: 2, 118
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
 default-round
   rotate: false
-  xy: 2, 2
+  xy: 2, 23
   size: 243, 93
   orig: 243, 93
   offset: 0, 0
   index: -1
 default-round-down
   rotate: false
-  xy: 518, 132
+  xy: 518, 153
   size: 243, 93
   orig: 243, 93
   offset: 0, 0
   index: -1
 font-light
   rotate: false
-  xy: 260, 97
+  xy: 260, 118
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
