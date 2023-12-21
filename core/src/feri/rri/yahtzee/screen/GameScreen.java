@@ -1,5 +1,7 @@
 package feri.rri.yahtzee.screen;
 
+import static feri.rri.yahtzee.assets.RegionNames.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
@@ -10,17 +12,22 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.Random;
 
 import feri.rri.yahtzee.CellState;
 import feri.rri.yahtzee.Yahtzee;
@@ -48,7 +55,9 @@ public class GameScreen extends ScreenAdapter {
 
     private Image infoImage;
 
+    private Table diceTable;
     private Music backgroundMusic;
+
     public GameScreen(Yahtzee game) {
         this.game = game;
         assetManager = game.getAssetManager();
@@ -68,9 +77,11 @@ public class GameScreen extends ScreenAdapter {
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
         gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY);
 
-        gameplayStage.addActor(createGrid(3, 3, 5));
-        hudStage.addActor(createInfo());
+        gameplayStage.addActor(createTable());
+
+        hudStage.addActor(createRollButton());
         hudStage.addActor(createBackButton());
+
 
         Gdx.input.setInputProcessor(new InputMultiplexer(gameplayStage, hudStage));
         if (GameManager.INSTANCE.getMusicPref()) {
@@ -110,57 +121,86 @@ public class GameScreen extends ScreenAdapter {
         hudStage.dispose();
     }
 
-    private Actor createGrid(int rows, int columns, final float cellSize) {
+    public void shuffleAnimation(final Image dice) {
+        final Drawable[] diceFaces = new Drawable[]{new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_1)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_2)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_3)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_4)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_5)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_6))};
+
+        final int randomNumber = new Random().nextInt(6);
+
+        // Create a sequence action
+        SequenceAction sequence = Actions.sequence();
+
+        for (int i = 0; i < 18; i++) {
+            sequence.addAction(Actions.run(new Runnable() {
+                @Override
+                public void run() {
+                    dice.setDrawable(diceFaces[new Random().nextInt(6)]);
+                }
+            }));
+            sequence.addAction(Actions.delay(0.15f));
+        }
+        sequence.addAction(Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                dice.setDrawable(diceFaces[randomNumber]);
+            }
+        }));
+
+        dice.addAction(sequence);
+    }
+
+
+    private Actor createTable() {
         final Table table = new Table();
-        table.setDebug(false);   // turn on all debug lines (table, cell, and widget)
+        table.setDebug(false);
 
-        final Table grid = new Table();
-        grid.defaults().size(cellSize);   // all cells will be the same size
-        grid.setDebug(false);
+        TextureRegion backgroundRegion = gameplayAtlas.findRegion(RegionNames.PLAIN_BACKGROUND);
+        table.setBackground(new TextureRegionDrawable(backgroundRegion));
 
-//        for (int row = 0; row < rows; row++) {
-//            for (int column = 0; column < columns; column++) {
-//                final CellActor cell = new CellActor(emptyRegion);
-//                cell.addListener(new ClickListener() {
-//                    @Override
-//                    public void clicked(InputEvent event, float x, float y) {
-//                        final CellActor clickedCell = (CellActor) event.getTarget(); // it will be an image for sure :-)
-//                        if (clickedCell.isEmpty()) {
-//                            switch (move) {
-//                                case X:
-//                                    clickedCell.setState(move);
-//                                    clickedCell.setDrawable(xRegion);
-//                                    infoImage.setDrawable(new TextureRegionDrawable(oRegion));
-//                                    move = CellState.O;
-//                                    break;
-//                                case O:
-//                                    clickedCell.setState(move);
-//                                    clickedCell.setDrawable(oRegion);
-//                                    infoImage.setDrawable(new TextureRegionDrawable(xRegion));
-//                                    move = CellState.X;
-//                                    break;
-//                            }
-//                        }
-//                        log.debug("clicked");
-//                    }
-//                });
-//                grid.add(cell);
-//            }
-//            grid.row();
-//        }
+        diceTable = new Table();
+        diceTable.defaults().padLeft(2f).padRight(2f);
+        TextureRegion menuBackgroundRegion = gameplayAtlas.findRegion(TABLE_BACKGROUND);
+        diceTable.setBackground(new TextureRegionDrawable(menuBackgroundRegion));
 
-        table.add(grid).row();
-        table.center();
+        // Create the dice images and add them to the diceTable
+        for (int i = 0; i < 5; i++) {
+            Image dice = new Image(gameplayAtlas.findRegion(SHUFFLE_1)); // replace SHUFFLE_1 with the initial image for the dice
+            diceTable.add(dice).width(10f).height(10f); // replace 100f with the desired width and height of the dice
+        }
+
+        table.add(diceTable).height(20f);
+        table.row();
+
         table.setFillParent(true);
         table.pack();
+
 
         return table;
     }
 
+    private Actor createRollButton() {
+        TextButton rollDiceButton = new TextButton("Roll Dice", skin);
+        rollDiceButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                for (Actor actor : diceTable.getChildren()) {
+                    if (actor instanceof Image) {
+                        shuffleAnimation((Image) actor);
+                    }
+                }
+            }
+        });
+        rollDiceButton.setWidth(170f);
+        rollDiceButton.setHeight(60f);
+        rollDiceButton.setPosition(diceTable.getWidth() / 2f - rollDiceButton.getWidth(), 20f);
+        return rollDiceButton;
+    }
+
+
     private Actor createBackButton() {
-        final TextButton backButton = new TextButton("Back", skin);
-        backButton.setWidth(100);
-        backButton.setPosition(GameConfig.HUD_WIDTH / 2f - backButton.getWidth() / 2f, 20f);
+        final TextButton backButton = new TextButton("Quit", skin);
+        backButton.setWidth(150f);
+        backButton.setHeight(60f);
+        backButton.setPosition(20f, 20f);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -176,10 +216,7 @@ public class GameScreen extends ScreenAdapter {
         table.add(infoImage).size(30).row();
         table.center();
         table.pack();
-        table.setPosition(
-                GameConfig.HUD_WIDTH / 2f - table.getWidth() / 2f,
-                GameConfig.HUD_HEIGHT - table.getHeight() - 20f
-        );
+        table.setPosition(GameConfig.HUD_WIDTH / 2f - table.getWidth() / 2f, GameConfig.HUD_HEIGHT - table.getHeight() - 20f);
         return table;
     }
 }
