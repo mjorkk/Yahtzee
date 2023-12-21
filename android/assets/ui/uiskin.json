@@ -33,6 +33,17 @@
       r: 100
     }
   },
+  com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
+    dialogDim: {
+      name: white,
+      color: {
+        r: 0,
+        g: 0,
+        b: 0,
+        a: 0.45
+      }
+    }
+  },
   com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
     default: {
       down: default-round-down,
@@ -72,6 +83,36 @@
     default: {
       font: default-font,
       fontColor: white
+    }
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
+    default: {
+      vScroll: default-scroll,
+      hScrollKnob: default-round-large,
+      hScroll: default-scroll,
+      vScrollKnob: default-round-large
+    }
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+    default: {
+      titleFont: light-font,
+      background: dark,
+      titleFontColor: dark
+    },
+    dialog: {
+      titleFont: light-font,
+      background: dark,
+      titleFontColor: dark,
+      stageBackground: dialogDim
+    }
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+    default: {
+      selection: dark,
+      background: default-round,
+      font: light-font,
+      fontColor: white,
+      cursor: cursor
     }
   }
 }

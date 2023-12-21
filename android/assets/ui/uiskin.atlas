@@ -32,11 +32,18 @@ check-on
   orig: 113, 114
   offset: 0, 0
   index: -1
+cursor
+  rotate: false
+  xy: 2, 16
+  size: 5, 5
+  orig: 5, 5
+  offset: 0, 0
+  index: -1
 dark
   rotate: false
-  xy: 763, 209
-  size: 37, 37
-  orig: 37, 37
+  xy: 839, 165
+  size: 3, 3
+  orig: 3, 3
   offset: 0, 0
   index: -1
 default
@@ -60,10 +67,31 @@ default-round-down
   orig: 243, 93
   offset: 0, 0
   index: -1
+default-round-large
+  rotate: false
+  xy: 763, 68
+  size: 74, 178
+  orig: 74, 178
+  offset: 0, 0
+  index: -1
+default-scroll
+  rotate: false
+  xy: 839, 170
+  size: 34, 76
+  orig: 34, 76
+  offset: 0, 0
+  index: -1
 font-light
   rotate: false
   xy: 260, 118
   size: 256, 128
   orig: 256, 128
+  offset: 0, 0
+  index: -1
+white
+  rotate: false
+  xy: 875, 243
+  size: 3, 3
+  orig: 3, 3
   offset: 0, 0
   index: -1

@@ -99,14 +99,6 @@ public class MenuScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
 //        ScreenUtils.clear(0f, 0f, 0f, 0f);
-        if (GameManager.INSTANCE.getMusicPref()) {
-            GameManager.INSTANCE.getBackgroundMusic().setLooping(true);
-            GameManager.INSTANCE.getBackgroundMusic().setVolume(0.2f);
-            GameManager.INSTANCE.getBackgroundMusic().play();
-        }
-        else {
-            GameManager.INSTANCE.getBackgroundMusic().stop();
-        }
         stage.act(delta);
         stage.draw();
     }
@@ -141,7 +133,8 @@ public class MenuScreen extends ScreenAdapter {
         leaderboardButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // TODO
+                GameManager.INSTANCE.getBackgroundMusic().stop();
+                game.setScreen(new ScoresScreen(game));
             }
         });
 
