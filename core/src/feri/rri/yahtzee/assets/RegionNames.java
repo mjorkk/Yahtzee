@@ -8,6 +8,7 @@ public class RegionNames {
     public static final String TABLE_BACKGROUND = "table-background";
     public static final String PLAIN_BACKGROUND = "background";
     public static final String LABEL_SETTINGS = "settings-label";
+    public static final String SCORES_LABEL = "scores-label";
     public static final String SETTINGS_TABLE = "settings-table";
     public static final String DICE_1 = "dice-1";
     public static final String DICE_2 = "dice-2";

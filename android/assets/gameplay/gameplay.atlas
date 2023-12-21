@@ -122,11 +122,11 @@ dice-x
   orig: 94, 94
   offset: 0, 0
   index: -1
-settings-label
+scores-label
   rotate: false
   xy: 2, 2
-  size: 432, 72
-  orig: 432, 72
+  size: 664, 72
+  orig: 664, 72
   offset: 0, 0
   index: -1
 shuffle-6
@@ -156,9 +156,16 @@ size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-settings-table
+settings-label
   rotate: false
   xy: 2, 2
+  size: 432, 72
+  orig: 432, 72
+  offset: 0, 0
+  index: -1
+settings-table
+  rotate: false
+  xy: 2, 76
   size: 513, 609
   orig: 513, 609
   offset: 0, 0

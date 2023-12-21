@@ -8,17 +8,25 @@ package feri.rri.yahtzee.screen;
         import com.badlogic.gdx.scenes.scene2d.Actor;
         import com.badlogic.gdx.scenes.scene2d.InputEvent;
         import com.badlogic.gdx.scenes.scene2d.Stage;
+        import com.badlogic.gdx.scenes.scene2d.ui.Image;
         import com.badlogic.gdx.scenes.scene2d.ui.Label;
+
         import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
         import com.badlogic.gdx.scenes.scene2d.ui.Skin;
         import com.badlogic.gdx.scenes.scene2d.ui.Table;
         import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
         import com.badlogic.gdx.scenes.scene2d.ui.TextField;
         import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+        import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
         import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+        import com.badlogic.gdx.utils.Align;
         import com.badlogic.gdx.utils.ScreenUtils;
         import com.badlogic.gdx.utils.viewport.FitViewport;
         import com.badlogic.gdx.utils.viewport.Viewport;
+
+        import java.util.ArrayList;
+        import java.util.Collections;
+        import java.util.List;
 
         import feri.rri.yahtzee.Yahtzee;
         import feri.rri.yahtzee.assets.AssetDescriptors;
@@ -49,9 +57,19 @@ public class ScoresScreen extends ScreenAdapter {
 
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
         gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY);
-        Gdx.input.setInputProcessor(stage);
 
         stage.addActor(createUi());
+        Drawable quitButtonDrawable = new TextureRegionDrawable(gameplayAtlas.findRegion(RegionNames.SCORES_LABEL));
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.background = quitButtonDrawable;
+        Image scoresLabel = new Image(quitButtonDrawable);
+
+        // Set the position of the image to be centered at the top of the stage
+        scoresLabel.setSize(450f,70f);
+        scoresLabel.setPosition(viewport.getWorldWidth()/ 2 - scoresLabel.getWidth() / 2, viewport.getWorldHeight() - scoresLabel.getHeight()-30f);
+
+        stage.addActor(scoresLabel);
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -75,36 +93,54 @@ public class ScoresScreen extends ScreenAdapter {
     public void dispose() {
         stage.dispose();
     }
-// ...
 
+    public class Player implements Comparable<Player> {
+        String name;
+        int score;
+
+        public Player(String name, int score) {
+            this.name = name;
+            this.score = score;
+        }
+
+        @Override
+        public int compareTo(Player other) {
+            return other.score - this.score; // Sort in descending order
+        }
+    }
     private Actor createUi() {
         Table table = new Table();
-        table.defaults().pad(20);
+        table.defaults().pad(10);
 
-        // Add your UI elements here
-        Label titleLabel = new Label("Leaderboard", skin);
-        table.add(titleLabel).colspan(2).padBottom(30).center();
-        table.row();
-
-        // Add hardcoded scores for demonstration
-        addScoreRow(table, "Player 1", 500);
-        addScoreRow(table, "Player 2", 450);
-        addScoreRow(table, "Player 3", 600);
-        // Add more demonstration text to extend the scrollable content
+        List<Player> players = new ArrayList<>();
+        players.add(new Player("Player 1", 500));
+        players.add(new Player("Player 2", 450));
+        players.add(new Player("Player 3", 600));
         for (int i = 4; i <= 20; i++) {
-            addScoreRow(table, "Player " + i, i * 50);
+            players.add(new Player("Player " + i, i * 50));
+        }
+        Collections.sort(players);
+
+        // Add sorted players to the table
+        for (Player player : players) {
+            addScoreRow(table, player);
         }
 
         // Create a scrollable window for the leaderboard
         ScrollPane scrollPane = new ScrollPane(table, skin);
-        scrollPane.setFadeScrollBars(false);
+        scrollPane.setFadeScrollBars(true);
+        scrollPane.setScrollingDisabled(true, false);
 
         // Add the scrollable window to the stage
         Table windowTable = new Table();
-        windowTable.add(scrollPane).pad(20).expand().fill();
+        windowTable.add(scrollPane).padTop(170f).padBottom(20f).width(500f);
+        TextureRegion backgroundRegion = gameplayAtlas.findRegion(RegionNames.PLAIN_BACKGROUND);
+        windowTable.setBackground(new TextureRegionDrawable(backgroundRegion));
 
         // Add a back button to return to the main menu
         TextButton backButton = new TextButton("Back", skin);
+        backButton.getLabel().setAlignment(Align.center);
+        backButton.getLabelCell().padRight(25f);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -113,7 +149,7 @@ public class ScoresScreen extends ScreenAdapter {
         });
 
         windowTable.row();
-        windowTable.add(backButton).padTop(30).center();
+        windowTable.add(backButton).width(150f).padBottom(40f).height(70f);
 
         windowTable.setFillParent(true);
         windowTable.pack();
@@ -121,20 +157,18 @@ public class ScoresScreen extends ScreenAdapter {
         return windowTable;
     }
 
-// ...
 
-    private void addScoreRow(Table table, String playerName, int score) {
-        TextField nameTextField = new TextField(playerName, skin);
-        TextField scoreTextField = new TextField(String.valueOf(score), skin);
+    private int rankCounter = 1; // Add this field to keep track of rankings
 
-        // Set properties to make the TextField non-editable and not focused
-        nameTextField.setDisabled(true);
-        nameTextField.setFocusTraversal(false);
-        scoreTextField.setDisabled(true);
-        scoreTextField.setFocusTraversal(false);
-
-        table.add(nameTextField).padRight(20);
-        table.add(scoreTextField).padRight(20);
+    private void addScoreRow(Table table, Player player) {
+        Label rankLabel = new Label(String.valueOf(rankCounter++), skin);
+        rankLabel.setAlignment(Align.right);
+        TextField playerInfoField = new TextField(player.name + " - " + player.score, skin);
+        playerInfoField.setDisabled(true);
+        playerInfoField.getStyle().background.setLeftWidth(20);
+        playerInfoField.setFocusTraversal(false);
+        table.add(rankLabel);
+        table.add(playerInfoField).expandX().fillX();
         table.row();
     }
 

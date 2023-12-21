@@ -41,7 +41,7 @@ cursor
   index: -1
 dark
   rotate: false
-  xy: 839, 165
+  xy: 803, 165
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
@@ -69,14 +69,14 @@ default-round-down
   index: -1
 default-round-large
   rotate: false
-  xy: 763, 68
-  size: 74, 178
-  orig: 74, 178
+  xy: 763, 66
+  size: 38, 180
+  orig: 38, 180
   offset: 0, 0
   index: -1
 default-scroll
   rotate: false
-  xy: 839, 170
+  xy: 803, 170
   size: 34, 76
   orig: 34, 76
   offset: 0, 0
@@ -90,7 +90,7 @@ font-light
   index: -1
 white
   rotate: false
-  xy: 875, 243
+  xy: 839, 243
   size: 3, 3
   orig: 3, 3
   offset: 0, 0

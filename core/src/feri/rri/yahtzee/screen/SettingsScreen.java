@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -126,6 +127,8 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
         TextButton backButton = new TextButton("Back", uiSkin);
+        backButton.getLabel().setAlignment(Align.center);
+        backButton.getLabelCell().padRight(3f);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -140,7 +143,7 @@ public class SettingsScreen extends ScreenAdapter {
         contentTable.setBackground(new TextureRegionDrawable(menuBackground));
         contentTable.add(soundCheckBox).row();
         contentTable.add(musicCheckBox).row();
-        contentTable.add(backButton).width(150f).padTop(50).colspan(2);
+        contentTable.add(backButton).width(150f).padBottom(40f).height(70f);
 
         table.add(contentTable).padTop(125f).padRight(100f).padLeft(100f);
         table.center();
