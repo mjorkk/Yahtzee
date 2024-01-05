@@ -113,7 +113,7 @@ public class ScoresScreen extends ScreenAdapter {
         table.defaults().pad(10);
 
         List<Player> players = new ArrayList<>();
-        players.add(new Player("Player 1", 500));
+        players.add(new Player("Pkgnrtihgiuerthgie oiteoirtjgietrg", 500));
         players.add(new Player("Player 2", 450));
         players.add(new Player("Player 3", 600));
         for (int i = 4; i <= 20; i++) {
@@ -133,7 +133,7 @@ public class ScoresScreen extends ScreenAdapter {
 
         // Add the scrollable window to the stage
         Table windowTable = new Table();
-        windowTable.add(scrollPane).padTop(170f).padBottom(20f).width(500f);
+        windowTable.add(scrollPane).padTop(170f).padBottom(20f).width(800f);
         TextureRegion backgroundRegion = gameplayAtlas.findRegion(RegionNames.PLAIN_BACKGROUND);
         windowTable.setBackground(new TextureRegionDrawable(backgroundRegion));
 
@@ -163,14 +163,20 @@ public class ScoresScreen extends ScreenAdapter {
     private void addScoreRow(Table table, Player player) {
         Label rankLabel = new Label(String.valueOf(rankCounter++), skin);
         rankLabel.setAlignment(Align.right);
-        TextField playerInfoField = new TextField(player.name + " - " + player.score, skin);
-        playerInfoField.setDisabled(true);
-        playerInfoField.getStyle().background.setLeftWidth(20);
-        playerInfoField.setFocusTraversal(false);
+        TextField playerNameField = new TextField(player.name, skin);
+        playerNameField.setDisabled(true);
+        playerNameField.getStyle().background.setLeftWidth(20);
+        playerNameField.setFocusTraversal(false);
+        TextField playerScoreField = new TextField(String.valueOf(player.score), skin);
+        playerScoreField.setDisabled(true);
+        playerScoreField.getStyle().background.setLeftWidth(20);
+        playerScoreField.setFocusTraversal(false);
         table.add(rankLabel);
-        table.add(playerInfoField).expandX().fillX();
+        table.add(playerNameField).expandX().fillX().height(70f);
+        table.add(playerScoreField).expandX().fillX().height(70f);
         table.row();
     }
+
 
 }
 
