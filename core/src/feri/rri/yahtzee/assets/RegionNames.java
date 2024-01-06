@@ -6,7 +6,8 @@ public class RegionNames {
     public static final String BACKGROUND = "simple-background";
     public static final String MENU_BACKGROUND = "menu-background";
     public static final String TABLE_BACKGROUND = "table-background";
-    public static final String PLAIN_BACKGROUND = "background";
+    public static final String DOTTED_BACKGROUND = "background";
+    public static final String PLAIN_BACKGROUND = "plain-background";
     public static final String LABEL_SETTINGS = "settings-label";
     public static final String SCORES_LABEL = "scores-label";
     public static final String SETTINGS_TABLE = "settings-table";

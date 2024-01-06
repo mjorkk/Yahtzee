@@ -122,6 +122,13 @@ dice-x
   orig: 94, 94
   offset: 0, 0
   index: -1
+plain-background
+  rotate: false
+  xy: 2, 351
+  size: 800, 600
+  orig: 800, 600
+  offset: 0, 0
+  index: -1
 scores-label
   rotate: false
   xy: 2, 2
@@ -134,13 +141,6 @@ shuffle-6
   xy: 900, 857
   size: 94, 94
   orig: 94, 94
-  offset: 0, 0
-  index: -1
-simple-background
-  rotate: false
-  xy: 2, 351
-  size: 800, 600
-  orig: 800, 600
   offset: 0, 0
   index: -1
 table-background
@@ -163,9 +163,22 @@ settings-label
   orig: 432, 72
   offset: 0, 0
   index: -1
-settings-table
+simple-background
   rotate: false
   xy: 2, 76
+  size: 800, 600
+  orig: 800, 600
+  offset: 0, 0
+  index: -1
+
+gameplay4.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+settings-table
+  rotate: false
+  xy: 2, 2
   size: 513, 609
   orig: 513, 609
   offset: 0, 0

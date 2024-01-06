@@ -3,6 +3,7 @@ package feri.rri.yahtzee.screen;
         import com.badlogic.gdx.Gdx;
         import com.badlogic.gdx.ScreenAdapter;
         import com.badlogic.gdx.assets.AssetManager;
+        import com.badlogic.gdx.graphics.GL20;
         import com.badlogic.gdx.graphics.g2d.TextureAtlas;
         import com.badlogic.gdx.graphics.g2d.TextureRegion;
         import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -31,7 +32,6 @@ package feri.rri.yahtzee.screen;
         import feri.rri.yahtzee.Yahtzee;
         import feri.rri.yahtzee.assets.AssetDescriptors;
         import feri.rri.yahtzee.assets.RegionNames;
-        import feri.rri.yahtzee.common.GameManager;
         import feri.rri.yahtzee.config.GameConfig;
 
 public class ScoresScreen extends ScreenAdapter {
@@ -66,7 +66,7 @@ public class ScoresScreen extends ScreenAdapter {
 
         // Set the position of the image to be centered at the top of the stage
         scoresLabel.setSize(450f,70f);
-        scoresLabel.setPosition(viewport.getWorldWidth()/ 2 - scoresLabel.getWidth() / 2, viewport.getWorldHeight() - scoresLabel.getHeight()-30f);
+        scoresLabel.setPosition(viewport.getWorldWidth()/ 2 - scoresLabel.getWidth() / 2, viewport.getWorldHeight() - scoresLabel.getHeight()-50f);
 
         stage.addActor(scoresLabel);
         Gdx.input.setInputProcessor(stage);
@@ -79,7 +79,8 @@ public class ScoresScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0f, 0f, 0f, 0f);
+        Gdx.gl.glClearColor(165/255f, 150/255f, 136/255f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();
     }
@@ -134,7 +135,7 @@ public class ScoresScreen extends ScreenAdapter {
         // Add the scrollable window to the stage
         Table windowTable = new Table();
         windowTable.add(scrollPane).padTop(170f).padBottom(20f).width(800f);
-        TextureRegion backgroundRegion = gameplayAtlas.findRegion(RegionNames.PLAIN_BACKGROUND);
+        TextureRegion backgroundRegion = gameplayAtlas.findRegion(RegionNames.DOTTED_BACKGROUND);
         windowTable.setBackground(new TextureRegionDrawable(backgroundRegion));
 
         // Add a back button to return to the main menu
