@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -67,12 +68,13 @@ public class GameScreen extends ScreenAdapter {
     private final Image[] dice = new Image[5];
     private final Label[] labelsUpper = new Label[6];
     private final Label[] labelsLower = new Label[7];
-    private Array<Integer> scoreUpper=new Array<Integer>(6);
-    private Array<Integer> scoreLower=new Array<Integer>(7);
+    private Array<Integer> scoreUpper = new Array<Integer>(6);
+    private Array<Integer> scoreLower = new Array<Integer>(7);
 
     private final TextField[] scoresUpper = new TextField[6];
     private final TextField[] scoresLower = new TextField[7];
     private ImageButton quitButton;
+    private Integer rollCount = 0;
     String[] categoriesUpper = {
             "Ones",
             "Twos",
@@ -134,7 +136,7 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(165/255f, 150/255f, 136/255f, 1);
+        Gdx.gl.glClearColor(165 / 255f, 150 / 255f, 136 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         gameplayStage.act(delta);
         hudStage.act(delta);
@@ -167,7 +169,7 @@ public class GameScreen extends ScreenAdapter {
                         dice.setDrawable(diceFaces[new Random().nextInt(6)]);
                     }
                 }));
-                sequence.addAction(Actions.delay(0.15f));
+                sequence.addAction(Actions.delay(0.1f));
             }
             sequence.addAction(Actions.run(new Runnable() {
                 @Override
@@ -179,6 +181,7 @@ public class GameScreen extends ScreenAdapter {
             dice.addAction(sequence);
         }
     }
+
     private Actor createTable() {
         final Table table = new Table();
         table.setDebug(false);
@@ -195,12 +198,17 @@ public class GameScreen extends ScreenAdapter {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     isLocked[index] = !isLocked[index];
+                    if (isLocked[index]) {
+                        dice[index].addAction(Actions.alpha(0.5f));
+                    } else {
+                        dice[index].addAction(Actions.alpha(1f));
+                    }
                 }
             });
             diceTable.add(dice[i]).width(8f).height(8f).padLeft(3.5f).padRight(3.5f).padBottom(2f);
         }
 
-        table.top().padTop(15f);
+        table.top().padTop(12f);
         table.add(diceTable).height(15f);
         table.row();
         table.setFillParent(true);
@@ -211,48 +219,67 @@ public class GameScreen extends ScreenAdapter {
 
 
     private Actor createRollButton() {
-        TextButton rollDiceButton = new TextButton("Roll Dice", skin);
+        final TextButton rollDiceButton = new TextButton("Roll Dice", skin);
         rollDiceButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if (rollDiceButton.isDisabled()) return;
+                rollCount++;
+                rollDiceButton.setDisabled(true);
                 for (int i = 0; i < dice.length; i++) {
+                    dice[i].setTouchable(Touchable.disabled);
                     shuffleAnimation(dice[i], i);
                 }
+                rollDiceButton.addAction(Actions.sequence(
+                        Actions.delay(2.5f),
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (rollCount != 3)
+                                    rollDiceButton.setDisabled(false);
+                                for (Image die : dice) {
+                                    die.setTouchable(Touchable.enabled);
+                                }
+                            }
+                        })
+                ));
             }
         });
         rollDiceButton.setWidth(170f);
         rollDiceButton.setHeight(60f);
-        rollDiceButton.setPosition(diceTable.getWidth() / 2f - rollDiceButton.getWidth(), diceTable.getY());
+        rollDiceButton.setPosition(diceTable.getWidth() / 2f - rollDiceButton.getWidth(), hudStage.getHeight() - 100f);
         return rollDiceButton;
     }
-    private Actor createUpperSection(){
+
+    private Actor createUpperSection() {
         Table table = new Table();
         table.setWidth(70f);
-        for (int i=0;i<categoriesUpper.length;i++) {
-            labelsUpper[i]= new Label(categoriesUpper[i],skin);
-            scoresUpper[i]= new TextField("x",skin);
+        for (int i = 0; i < categoriesUpper.length; i++) {
+            labelsUpper[i] = new Label(categoriesUpper[i], skin);
+            scoresUpper[i] = new TextField("x", skin);
             scoresUpper[i].setAlignment(Align.center);
             scoresUpper[i].setDisabled(true);
             table.add(labelsUpper[i]).expandX().pad(5f).left();
             table.add(scoresUpper[i]).padLeft(40f).height(40f).width(70f);
             table.row();
         }
-        table.setPosition(110f,245f);
+        table.setPosition(110f, 245f);
         return table;
     }
-    private Actor createLowerSection(){
+
+    private Actor createLowerSection() {
         Table table = new Table();
         table.setWidth(70f);
-        for (int i=0;i<categoriesLower.length;i++) {
-            labelsLower[i]= new Label(categoriesLower[i],skin);
-            scoresLower[i]= new TextField("",skin);
+        for (int i = 0; i < categoriesLower.length; i++) {
+            labelsLower[i] = new Label(categoriesLower[i], skin);
+            scoresLower[i] = new TextField("", skin);
             scoresLower[i].setAlignment(Align.center);
             scoresLower[i].setDisabled(true);
             table.add(labelsLower[i]).expandX().pad(5f).left();
             table.add(scoresLower[i]).padLeft(40f).height(40f).width(70f);
             table.row();
         }
-        table.setPosition(440f,220f);
+        table.setPosition(540f, 220f);
         return table;
     }
 
@@ -268,7 +295,7 @@ public class GameScreen extends ScreenAdapter {
         });
 
         quitButton.setSize(60, 60);
-        quitButton.setPosition(hudViewport.getWorldWidth() - quitButton.getWidth() - 10f, hudViewport.getWorldHeight() - quitButton.getHeight() - 10f);
+        quitButton.setPosition(hudViewport.getWorldWidth() - quitButton.getWidth() - 10f, hudViewport.getWorldHeight() - quitButton.getHeight() - 30f);
 
         return quitButton;
     }

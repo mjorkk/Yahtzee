@@ -68,7 +68,7 @@ public class MenuScreen extends ScreenAdapter {
         });
 
         quitButton.setSize(60, 60);
-        quitButton.setPosition(viewport.getWorldWidth() - quitButton.getWidth() - 10f, viewport.getWorldHeight() - quitButton.getHeight() - 10f);
+        quitButton.setPosition(viewport.getWorldWidth() - quitButton.getWidth() - 10f, viewport.getWorldHeight() - quitButton.getHeight() - 30f);
 
         TextureRegion settingsButtonRegion = gameplayAtlas.findRegion(RegionNames.DICE_SETT);
         Drawable settingsButtonDrawable = new TextureRegionDrawable(settingsButtonRegion);
