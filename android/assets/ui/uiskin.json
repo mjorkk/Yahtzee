@@ -5,6 +5,9 @@
     },
     "light-font": {
       "file": font/font-light.fnt
+    },
+    "light-font-small": {
+      "file": font/small.fnt
     }
   },
   com.badlogic.gdx.graphics.Color: {
@@ -83,6 +86,9 @@
     default: {
       font: default-font,
       fontColor: white
+    },
+    alt-label: {
+      font: light-font-small
     }
   },
   com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
@@ -110,7 +116,7 @@
     default: {
       selection: dark,
       background: default-round,
-      font: light-font,
+      font: light-font-small,
       fontColor: white,
       cursor: cursor
     }

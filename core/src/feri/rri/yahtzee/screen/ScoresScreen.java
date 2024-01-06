@@ -158,7 +158,7 @@ public class ScoresScreen extends ScreenAdapter {
     }
 
 
-    private int rankCounter = 1; // Add this field to keep track of rankings
+    private int rankCounter = 1;
 
     private void addScoreRow(Table table, Player player) {
         Label rankLabel = new Label(String.valueOf(rankCounter++), skin);

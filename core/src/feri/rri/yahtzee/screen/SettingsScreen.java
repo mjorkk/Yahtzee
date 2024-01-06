@@ -24,7 +24,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import feri.rri.yahtzee.CellState;
 import feri.rri.yahtzee.Yahtzee;
 import feri.rri.yahtzee.assets.AssetDescriptors;
 import feri.rri.yahtzee.assets.RegionNames;
