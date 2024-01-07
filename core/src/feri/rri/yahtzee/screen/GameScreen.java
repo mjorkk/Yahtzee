@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -127,7 +128,7 @@ public class GameScreen extends ScreenAdapter {
         diceFaces = new Drawable[]{new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_1)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_2)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_3)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_4)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_5)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_6))};
         diceValues.addAll(1, 1, 1, 1, 1);
         occurences.addAll(0, 0, 0, 0, 0, 0);
-        scores.addAll(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        scores.addAll(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1);
         gameplayStage.addActor(createTable());
         hudStage.addActor(createAlerts());
         hudStage.addActor(createUpperSection());
@@ -272,7 +273,6 @@ public class GameScreen extends ScreenAdapter {
                                 for (Image die : dice) {
                                     die.setTouchable(Touchable.enabled);
                                 }
-                                updateScore();
                             }
                         })
                 ));
@@ -293,15 +293,37 @@ public class GameScreen extends ScreenAdapter {
             scoresUpper[i].setAlignment(Align.center);
             scoresUpper[i].setDisabled(true);
             final int finalI = i;
-            scoresUpper[i].addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    TextField textField = (TextField) event.getTarget();
-                    String text = textField.getText();
-                    if (!text.isEmpty() && scores.get(finalI ) == 0) {
-                        int score = Integer.parseInt(text);
-                        scores.set(finalI, score);
-                        finalScore += score;
+            if (i != 6)
+                scoresUpper[i].addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        final TextField textField = (TextField) event.getTarget();
+                        String text = textField.getText();
+                        if (text.isEmpty()) {
+                            Dialog dialog = new Dialog("Confirm", skin) {
+                                protected void result(Object object) {
+                                    if ((Boolean) object) {
+                                        scores.set(finalI, 0);
+                                        textField.setText("0");
+                                        setScore();
+                                    }
+                                }
+                            };
+                            dialog.text("Do you want to score 0 points in this category?");
+                            dialog.button("Yes", true);
+                            dialog.button("No", false);
+                            dialog.show(hudStage);
+                        } else {
+                            if (scores.get(finalI) == -1) {
+                                int score = Integer.parseInt(text);
+                                scores.set(finalI, score);
+                                finalScore += score;
+                            }
+                            setScore();
+                        }
+                    }
+
+                    public void setScore() {
                         rollCount = 0;
                         combLeft--;
                         rollDiceButton.setDisabled(false);
@@ -309,8 +331,7 @@ public class GameScreen extends ScreenAdapter {
                         alerts[0].setVisible(false);
                         rollDiceButton.addAction(Actions.alpha(1f));
                     }
-                }
-            });
+                });
             table.add(labelsUpper[i]).expandX().pad(5f).left();
             table.add(scoresUpper[i]).padLeft(40f).height(40f).width(70f);
             table.row();
@@ -331,19 +352,40 @@ public class GameScreen extends ScreenAdapter {
             scoresLower[i].addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    TextField textField = (TextField) event.getTarget();
+                    final TextField textField = (TextField) event.getTarget();
                     String text = textField.getText();
-                    if (!text.isEmpty() && scores.get(finalI + 7) == 0) {
-                        int score = Integer.parseInt(text);
-                        scores.set(finalI + 7, score);
-                        finalScore += score;
-                        rollCount = 0;
-                        combLeft--;
-                        rollDiceButton.setDisabled(false);
-                        clearScores();
-                        alerts[0].setVisible(false);
-                        rollDiceButton.addAction(Actions.alpha(1f));
+                    if (text.isEmpty()) {
+                        Dialog dialog = new Dialog("Confirm", skin) {
+                            protected void result(Object object) {
+                                if ((Boolean) object) {
+                                    scores.set(finalI + 7, 0);
+                                    textField.setText("0");
+                                    setScore();
+                                }
+                            }
+                        };
+                        dialog.text("Do you want to score 0 points in this category?");
+                        dialog.button("Yes", true);
+                        dialog.button("No", false);
+                        dialog.show(hudStage);
+                    } else {
+                        if (scores.get(finalI + 7) == -1) {
+                            int score = Integer.parseInt(text);
+                            scores.set(finalI + 7, score);
+                            finalScore += score;
+                        }
+                        setScore();
                     }
+                }
+
+                public void setScore() {
+                    rollCount = 0;
+                    combLeft--;
+                    rollDiceButton.setDisabled(false);
+                    clearScores();
+                    alerts[0].setVisible(false);
+                    rollDiceButton.addAction(Actions.alpha(1f));
+                    updateScore();
                 }
             });
             table.add(labelsLower[i]).expandX().pad(5f).left();
@@ -381,37 +423,37 @@ public class GameScreen extends ScreenAdapter {
         countOccurences();
         for (int i = 0; i < occurences.size; i++) {
             int score = (i + 1) * occurences.get(i);
-            if (score > 0 && scores.get(i) == 0) {
+            if (score > 0 && scores.get(i) < 0) {
                 scoresUpper[i].setText(String.valueOf(score));
             }
         }
         getSum();
-        if (scores.get(12) == 0) scoresLower[5].setText(String.valueOf(sumOfDice));
-        if (sumOfBonus >= 63 && scores.get(6) == 0)
+        if (scores.get(12) < 0) scoresLower[5].setText(String.valueOf(sumOfDice));
+        if (sumOfBonus >= 63 && scores.get(6) < 0)
             scoresUpper[6].setText(String.valueOf(sumOfBonus));
 
         // lower section
         for (int i = 0; i < occurences.size; i++) {
-            if (occurences.get(i) >= 3 && scores.get(7) == 0) {
+            if (occurences.get(i) >= 3 && scores.get(7) < 0) {
                 scoresLower[0].setText(String.valueOf(sumOfDice));
             }
-            if (occurences.get(i) >= 4 && scores.get(8) == 0) {
+            if (occurences.get(i) >= 4 && scores.get(8) < 0) {
                 scoresLower[1].setText(String.valueOf(sumOfDice));
             }
-            if (occurences.get(i) == 5 && scores.get(13) == 0) {
+            if (occurences.get(i) == 5 && scores.get(13) < 0) {
                 Gdx.app.log("debug", "Yahtzee with face " + (i + 1));
                 scoresLower[6].setText("50");
             }
         }
 
         // full house, small straight, and large straight
-        if (occurences.contains(2, false) && occurences.contains(3, false) && scores.get(9) == 0) {
+        if (occurences.contains(2, false) && occurences.contains(3, false) && scores.get(9) < 0) {
             scoresLower[2].setText("25");
         }
-        if (isStraight(occurences, 4) && scores.get(10) == 0) {
+        if (isStraight(occurences, 4) && scores.get(10) < 0) {
             scoresLower[3].setText("30");
         }
-        if (isStraight(occurences, 5) && scores.get(11) == 0) {
+        if (isStraight(occurences, 5) && scores.get(11) < 0) {
             scoresLower[4].setText("40");
         }
     }
@@ -448,7 +490,7 @@ public class GameScreen extends ScreenAdapter {
 
     private void clearScores() {
         for (int i = 0; i < 14; i++) {
-            if (scores.get(i) > 0) continue;
+            if (scores.get(i) >= 0) continue;
             if (i >= 7)
                 scoresLower[i % 7].setText("");
             else
