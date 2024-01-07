@@ -47,6 +47,8 @@ public class GameScreen extends ScreenAdapter {
     private static final Logger log = new Logger(GameScreen.class.getSimpleName(), Logger.DEBUG);
 
     private final Yahtzee game;
+    private Drawable[] diceFaces;
+
     private final AssetManager assetManager;
 
     private Viewport viewport;
@@ -66,22 +68,29 @@ public class GameScreen extends ScreenAdapter {
     private Music backgroundMusic;
     private boolean[] isLocked = new boolean[5];
     private final Image[] dice = new Image[5];
-    private final Label[] labelsUpper = new Label[6];
-    private final Label[] labelsLower = new Label[7];
-    private Array<Integer> scoreUpper = new Array<Integer>(6);
-    private Array<Integer> scoreLower = new Array<Integer>(7);
+    private Array<Integer> diceValues = new Array<Integer>(5);
+    private Array<Integer> occurences = new Array<Integer>(6);
 
-    private final TextField[] scoresUpper = new TextField[6];
+    private final Label[] labelsUpper = new Label[7];
+    private final Label[] labelsLower = new Label[7];
+    private TextButton rollDiceButton;
+
+    private final TextField[] scoresUpper = new TextField[7];
     private final TextField[] scoresLower = new TextField[7];
+    private Array<Integer> scores = new Array<Integer>(14);
     private ImageButton quitButton;
+    private Integer sumOfDice = 0;
+    private Integer sumOfBonus = 0;
     private Integer rollCount = 0;
+    private Integer finalScore = 0;
     String[] categoriesUpper = {
             "Ones",
             "Twos",
             "Threes",
             "Fours",
             "Fives",
-            "Sixes"
+            "Sixes",
+            "Bonus"
     };
     String[] categoriesLower = {
             "Three of a kind",
@@ -112,9 +121,11 @@ public class GameScreen extends ScreenAdapter {
 
         skin = assetManager.get(AssetDescriptors.UI_SKIN);
         gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY);
-
+        diceFaces = new Drawable[]{new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_1)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_2)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_3)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_4)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_5)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_6))};
+        diceValues.addAll(1, 1, 1, 1, 1);
+        occurences.addAll(0, 0, 0, 0, 0, 0);
+        scores.addAll(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         gameplayStage.addActor(createTable());
-//        gameplayStage.addActor(createScoreCard());
         hudStage.addActor(createUpperSection());
         hudStage.addActor(createLowerSection());
         hudStage.addActor(createRollButton());
@@ -157,8 +168,6 @@ public class GameScreen extends ScreenAdapter {
 
     public void shuffleAnimation(final Image dice, final int index) {
         if (!isLocked[index]) {
-            final Drawable[] diceFaces = new Drawable[]{new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_1)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_2)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_3)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_4)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_5)), new TextureRegionDrawable(gameplayAtlas.findRegion(SHUFFLE_6))};
-
             final int randomNumber = new Random().nextInt(6);
             SequenceAction sequence = Actions.sequence();
 
@@ -177,7 +186,7 @@ public class GameScreen extends ScreenAdapter {
                     dice.setDrawable(diceFaces[randomNumber]);
                 }
             }));
-
+            diceValues.set(index, randomNumber + 1);
             dice.addAction(sequence);
         }
     }
@@ -219,11 +228,14 @@ public class GameScreen extends ScreenAdapter {
 
 
     private Actor createRollButton() {
-        final TextButton rollDiceButton = new TextButton("Roll Dice", skin);
+        rollDiceButton = new TextButton("Roll Dice", skin);
         rollDiceButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (rollDiceButton.isDisabled()) return;
+                clearScores();
+                occurences.clear();
+                occurences.addAll(0, 0, 0, 0, 0, 0);
                 rollCount++;
                 rollDiceButton.setDisabled(true);
                 for (int i = 0; i < dice.length; i++) {
@@ -240,6 +252,7 @@ public class GameScreen extends ScreenAdapter {
                                 for (Image die : dice) {
                                     die.setTouchable(Touchable.enabled);
                                 }
+                                updateScore();
                             }
                         })
                 ));
@@ -256,14 +269,30 @@ public class GameScreen extends ScreenAdapter {
         table.setWidth(70f);
         for (int i = 0; i < categoriesUpper.length; i++) {
             labelsUpper[i] = new Label(categoriesUpper[i], skin);
-            scoresUpper[i] = new TextField("x", skin);
+            scoresUpper[i] = new TextField("", skin);
             scoresUpper[i].setAlignment(Align.center);
             scoresUpper[i].setDisabled(true);
+            final int finalI = i;
+            scoresUpper[i].addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    TextField textField = (TextField) event.getTarget();
+                    String text = textField.getText();
+                    if (!text.isEmpty()) {
+                        int score = Integer.parseInt(text);
+                        scores.set(finalI, score);
+                        finalScore += score;
+                        rollCount = 0;
+                        rollDiceButton.setDisabled(false);
+                        clearScores();
+                    }
+                }
+            });
             table.add(labelsUpper[i]).expandX().pad(5f).left();
             table.add(scoresUpper[i]).padLeft(40f).height(40f).width(70f);
             table.row();
         }
-        table.setPosition(110f, 245f);
+        table.setPosition(110f, 220f);
         return table;
     }
 
@@ -275,6 +304,22 @@ public class GameScreen extends ScreenAdapter {
             scoresLower[i] = new TextField("", skin);
             scoresLower[i].setAlignment(Align.center);
             scoresLower[i].setDisabled(true);
+            final int finalI = i;
+            scoresLower[i].addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    TextField textField = (TextField) event.getTarget();
+                    String text = textField.getText();
+                    if (!text.isEmpty()) {
+                        int score = Integer.parseInt(text);
+                        scores.set(finalI + 7, score);
+                        finalScore += score;
+                        rollCount = 0;
+                        rollDiceButton.setDisabled(false);
+                        clearScores();
+                    }
+                }
+            });
             table.add(labelsLower[i]).expandX().pad(5f).left();
             table.add(scoresLower[i]).padLeft(40f).height(40f).width(70f);
             table.row();
@@ -298,5 +343,85 @@ public class GameScreen extends ScreenAdapter {
         quitButton.setPosition(hudViewport.getWorldWidth() - quitButton.getWidth() - 10f, hudViewport.getWorldHeight() - quitButton.getHeight() - 30f);
 
         return quitButton;
+    }
+
+    public void updateScore() {
+        countOccurences();
+        for (int i = 0; i < occurences.size; i++) {
+            int score = (i + 1) * occurences.get(i);
+            if (score > 0 && scores.get(i) == 0) {
+                scoresUpper[i].setText(String.valueOf(score));
+            }
+        }
+        getSum();
+        if (scores.get(12) == 0) scoresLower[5].setText(String.valueOf(sumOfDice));
+        if (sumOfBonus >= 63 && scores.get(6) == 0)
+            scoresUpper[6].setText(String.valueOf(sumOfBonus));
+
+        // lower section
+        for (int i = 0; i < occurences.size; i++) {
+            if (occurences.get(i) >= 3 && scores.get(7) == 0) {
+                scoresLower[0].setText(String.valueOf(sumOfDice));
+            }
+            if (occurences.get(i) >= 4 && scores.get(8) == 0) {
+                scoresLower[1].setText(String.valueOf(sumOfDice));
+            }
+            if (occurences.get(i) == 5 && scores.get(13) == 0) {
+                Gdx.app.log("debug", "Yahtzee with face " + (i + 1));
+                scoresLower[6].setText("50");
+            }
+        }
+
+        // full house, small straight, and large straight
+        if (occurences.contains(2, false) && occurences.contains(3, false) && scores.get(9) == 0) {
+            scoresLower[2].setText("25");
+        }
+        if (isStraight(occurences, 4) && scores.get(10) == 0) {
+            scoresLower[3].setText("30");
+        }
+        if (isStraight(occurences, 5) && scores.get(111) == 0) {
+            scoresLower[4].setText("40");
+        }
+
+    }
+
+    private void getSum() {
+        sumOfDice = 0;
+        sumOfBonus = 0;
+        for (int i = 0; i < 5; i++)
+            sumOfDice += diceValues.get(i);
+        for (int i = 0; i < 6; i++)
+            sumOfBonus += scores.get(i);
+    }
+
+    private boolean isStraight(Array<Integer> occurrences, int length) {
+        int consecutive = 0;
+        for (int i = 0; i < occurrences.size; i++) {
+            if (occurrences.get(i) > 0) {
+                consecutive++;
+                if (consecutive == length) {
+                    return true;
+                }
+            } else {
+                consecutive = 0;
+            }
+        }
+        return false;
+    }
+
+    private void countOccurences() {
+        for (int j = 0; j < 5; j++) {
+            occurences.set(diceValues.get(j) - 1, occurences.get(diceValues.get(j) - 1) + 1);
+        }
+    }
+
+    private void clearScores() {
+        for (int i = 0; i < 14; i++) {
+            if (scores.get(i) > 0) continue;
+            if (i >= 7)
+                scoresLower[i % 7].setText("");
+            else
+                scoresUpper[i].setText("");
+        }
     }
 }
