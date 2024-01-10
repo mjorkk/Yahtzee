@@ -20,6 +20,8 @@ public class AssetDescriptors {
             new AssetDescriptor<Music>(AssetPaths.MENU_MUSIC, Music.class);
     public static final AssetDescriptor<Music> GAME_MUSIC =
             new AssetDescriptor<Music>(AssetPaths.GAME_MUSIC, Music.class);
+    public static final AssetDescriptor<Music> DICE_ROLL =
+            new AssetDescriptor<Music>(AssetPaths.DICE_ROLL, Music.class);
 
     private AssetDescriptors() {
     }

@@ -63,7 +63,6 @@ public class SettingsScreen extends ScreenAdapter {
         labelStyle.background = quitButtonDrawable;
         Image settingsImage = new Image(quitButtonDrawable);
 
-        // Set the position of the image to be centered at the top of the stage
         settingsImage.setSize(300f,60f);
         settingsImage.setPosition(viewport.getWorldWidth()/ 2 - settingsImage.getWidth() / 2, viewport.getWorldHeight() - settingsImage.getHeight()-30f);
 

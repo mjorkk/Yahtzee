@@ -67,6 +67,7 @@ public class GameScreen extends ScreenAdapter {
     private Table scoreCardLabels;
     private Table scoreCardValues;
     private Music backgroundMusic;
+    private Music diceRollSound;
     private boolean[] isLocked = new boolean[5];
     private final Image[] dice = new Image[5];
     private Array<Integer> diceValues = new Array<Integer>(5);
@@ -87,32 +88,18 @@ public class GameScreen extends ScreenAdapter {
     private Integer finalScore = 0;
     private Integer combLeft = 13;
 
-    String[] categoriesUpper = {
-            "Ones",
-            "Twos",
-            "Threes",
-            "Fours",
-            "Fives",
-            "Sixes",
-            "Bonus"
-    };
-    String[] categoriesLower = {
-            "Three of a kind",
-            "Four of a kind",
-            "Full House",
-            "Small straight",
-            "Large straight",
-            "Chance",
-            "YAHTZEE"
-    };
+    String[] categoriesUpper = {"Ones", "Twos", "Threes", "Fours", "Fives", "Sixes", "Bonus"};
+    String[] categoriesLower = {"Three of a kind", "Four of a kind", "Full House", "Small straight", "Large straight", "Chance", "YAHTZEE"};
 
 
     public GameScreen(Yahtzee game) {
         this.game = game;
         assetManager = game.getAssetManager();
         assetManager.load(AssetDescriptors.GAME_MUSIC);
+        assetManager.load(AssetDescriptors.DICE_ROLL);
         assetManager.finishLoading();
-        backgroundMusic = assetManager.get(AssetDescriptors.MENU_MUSIC);
+        backgroundMusic = assetManager.get(AssetDescriptors.GAME_MUSIC);
+        diceRollSound = assetManager.get(AssetDescriptors.DICE_ROLL);
     }
 
     @Override
@@ -251,6 +238,9 @@ public class GameScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (rollDiceButton.isDisabled()) return;
+                if(GameManager.INSTANCE.getSoundPref()){
+                    diceRollSound.play();
+                }
                 clearScores();
                 occurences.clear();
                 occurences.addAll(0, 0, 0, 0, 0, 0);
@@ -264,19 +254,17 @@ public class GameScreen extends ScreenAdapter {
                     dice[i].setTouchable(Touchable.disabled);
                     shuffleAnimation(dice[i], i);
                 }
-                rollDiceButton.addAction(Actions.sequence(
-                        Actions.delay(2.5f),
-                        Actions.run(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (rollCount != 3)
-                                    rollDiceButton.setDisabled(false);
-                                for (Image die : dice) {
-                                    die.setTouchable(Touchable.enabled);
-                                }
-                            }
-                        })
-                ));
+                rollDiceButton.addAction(Actions.sequence(Actions.delay(2.5f), Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateScore();
+                        if (rollCount != 3) rollDiceButton.setDisabled(false);
+                        for (Image die : dice) {
+                            die.setTouchable(Touchable.enabled);
+                        }
+                    }
+                })));
+
             }
         });
         rollDiceButton.setWidth(170f);
@@ -294,45 +282,44 @@ public class GameScreen extends ScreenAdapter {
             scoresUpper[i].setAlignment(Align.center);
             scoresUpper[i].setDisabled(true);
             final int finalI = i;
-            if (i != 6)
-                scoresUpper[i].addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                        final TextField textField = (TextField) event.getTarget();
-                        String text = textField.getText();
-                        if (text.isEmpty()) {
-                            Dialog dialog = new Dialog("Confirm", skin) {
-                                protected void result(Object object) {
-                                    if ((Boolean) object) {
-                                        scores.set(finalI, 0);
-                                        textField.setText("0");
-                                        setScore();
-                                    }
+            if (i != 6) scoresUpper[i].addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    final TextField textField = (TextField) event.getTarget();
+                    String text = textField.getText();
+                    if (text.isEmpty()) {
+                        Dialog dialog = new Dialog("Confirm", skin) {
+                            protected void result(Object object) {
+                                if ((Boolean) object) {
+                                    scores.set(finalI, 0);
+                                    textField.setText("0");
+                                    setScore();
                                 }
-                            };
-                            dialog.text("Do you want to score 0 points in this category?");
-                            dialog.button("Yes", true);
-                            dialog.button("No", false);
-                            dialog.show(hudStage);
-                        } else {
-                            if (scores.get(finalI) == -1) {
-                                int score = Integer.parseInt(text);
-                                scores.set(finalI, score);
-                                finalScore += score;
                             }
+                        };
+                        dialog.text("Do you want to score 0 points in this category?");
+                        dialog.button("Yes", true);
+                        dialog.button("No", false);
+                        dialog.show(hudStage);
+                    } else {
+                        if (scores.get(finalI) == -1) {
+                            int score = Integer.parseInt(text);
+                            scores.set(finalI, score);
+                            finalScore += score;
                             setScore();
                         }
                     }
+                }
 
-                    public void setScore() {
-                        rollCount = 0;
-                        combLeft--;
-                        rollDiceButton.setDisabled(false);
-                        clearScores();
-                        alerts[0].setVisible(false);
-                        rollDiceButton.addAction(Actions.alpha(1f));
-                    }
-                });
+                public void setScore() {
+                    rollCount = 0;
+                    combLeft--;
+                    rollDiceButton.setDisabled(false);
+                    clearScores();
+                    alerts[0].setVisible(false);
+                    rollDiceButton.addAction(Actions.alpha(1f));
+                }
+            });
             table.add(labelsUpper[i]).expandX().pad(5f).left();
             table.add(scoresUpper[i]).padLeft(40f).height(40f).width(70f);
             table.row();
@@ -355,7 +342,7 @@ public class GameScreen extends ScreenAdapter {
                 public void clicked(InputEvent event, float x, float y) {
                     final TextField textField = (TextField) event.getTarget();
                     String text = textField.getText();
-                    if (text.isEmpty()) {
+                    if (text.isEmpty() && rollCount != 0) {
                         Dialog dialog = new Dialog("Confirm", skin) {
                             protected void result(Object object) {
                                 if ((Boolean) object) {
@@ -369,13 +356,13 @@ public class GameScreen extends ScreenAdapter {
                         dialog.button("Yes", true);
                         dialog.button("No", false);
                         dialog.show(hudStage);
-                    } else {
+                    } else if (rollCount != 0) {
                         if (scores.get(finalI + 7) == -1) {
                             int score = Integer.parseInt(text);
                             scores.set(finalI + 7, score);
                             finalScore += score;
+                            setScore();
                         }
-                        setScore();
                     }
                 }
 
@@ -386,7 +373,6 @@ public class GameScreen extends ScreenAdapter {
                     clearScores();
                     alerts[0].setVisible(false);
                     rollDiceButton.addAction(Actions.alpha(1f));
-                    updateScore();
                 }
             });
             table.add(labelsLower[i]).expandX().pad(5f).left();
@@ -492,10 +478,8 @@ public class GameScreen extends ScreenAdapter {
     private void clearScores() {
         for (int i = 0; i < 14; i++) {
             if (scores.get(i) >= 0) continue;
-            if (i >= 7)
-                scoresLower[i % 7].setText("");
-            else
-                scoresUpper[i].setText("");
+            if (i >= 7) scoresLower[i % 7].setText("");
+            else scoresUpper[i].setText("");
         }
     }
 }
