@@ -4,129 +4,88 @@ size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-background
+2shuffle-2
   rotate: false
-  xy: 2, 379
-  size: 800, 600
-  orig: 800, 600
+  xy: 597, 185
+  size: 196, 195
+  orig: 196, 195
+  offset: 0, 0
+  index: -1
+2shuffle-3
+  rotate: false
+  xy: 2, 183
+  size: 198, 197
+  orig: 198, 197
+  offset: 0, 0
+  index: -1
+2shuffle-4
+  rotate: false
+  xy: 795, 185
+  size: 196, 195
+  orig: 196, 195
+  offset: 0, 0
+  index: -1
+2shuffle-5
+  rotate: false
+  xy: 400, 183
+  size: 195, 197
+  orig: 195, 197
+  offset: 0, 0
+  index: -1
+2shuffle-6
+  rotate: false
+  xy: 202, 183
+  size: 196, 197
+  orig: 196, 197
   offset: 0, 0
   index: -1
 dice-1
   rotate: false
-  xy: 804, 564
+  xy: 532, 87
   size: 94, 94
   orig: 94, 94
   offset: 0, 0
   index: -1
 dice-2
   rotate: false
-  xy: 910, 671
+  xy: 628, 89
   size: 94, 94
   orig: 94, 94
   offset: 0, 0
   index: -1
 dice-3
   rotate: false
-  xy: 804, 468
+  xy: 724, 89
   size: 94, 94
   orig: 94, 94
   offset: 0, 0
   index: -1
 dice-4
   rotate: false
-  xy: 910, 575
+  xy: 820, 89
   size: 94, 94
   orig: 94, 94
   offset: 0, 0
   index: -1
 dice-5
   rotate: false
-  xy: 900, 479
-  size: 94, 94
-  orig: 94, 94
-  offset: 0, 0
-  index: -1
-dice-6
-  rotate: false
-  xy: 900, 383
+  xy: 916, 89
   size: 94, 94
   orig: 94, 94
   offset: 0, 0
   index: -1
 line
   rotate: false
-  xy: 2, 2
+  xy: 532, 77
   size: 117, 8
   orig: 117, 8
   offset: 0, 0
   index: -1
 menu-background
   rotate: false
-  xy: 2, 12
+  xy: 2, 382
   size: 1007, 365
   orig: 1007, 365
-  offset: 0, 0
-  index: -1
-shuffle-1
-  rotate: false
-  xy: 804, 874
-  size: 104, 105
-  orig: 104, 105
-  offset: 0, 0
-  index: -1
-shuffle-2
-  rotate: false
-  xy: 804, 767
-  size: 104, 105
-  orig: 104, 105
-  offset: 0, 0
-  index: -1
-shuffle-3
-  rotate: false
-  xy: 910, 874
-  size: 104, 105
-  orig: 104, 105
-  offset: 0, 0
-  index: -1
-shuffle-4
-  rotate: false
-  xy: 804, 660
-  size: 104, 105
-  orig: 104, 105
-  offset: 0, 0
-  index: -1
-shuffle-5
-  rotate: false
-  xy: 910, 767
-  size: 104, 105
-  orig: 104, 105
-  offset: 0, 0
-  index: -1
-
-gameplay2.png
-size: 1024, 1024
-format: RGBA8888
-filter: Nearest, Nearest
-repeat: none
-dice-settings
-  rotate: false
-  xy: 804, 857
-  size: 94, 94
-  orig: 94, 94
-  offset: 0, 0
-  index: -1
-dice-x
-  rotate: false
-  xy: 804, 761
-  size: 94, 94
-  orig: 94, 94
-  offset: 0, 0
-  index: -1
-plain-background
-  rotate: false
-  xy: 2, 351
-  size: 800, 600
-  orig: 800, 600
   offset: 0, 0
   index: -1
 scores-label
@@ -136,18 +95,143 @@ scores-label
   orig: 664, 72
   offset: 0, 0
   index: -1
-shuffle-6
+shuffle-1
   rotate: false
-  xy: 900, 857
-  size: 94, 94
-  orig: 94, 94
+  xy: 2, 76
+  size: 104, 105
+  orig: 104, 105
+  offset: 0, 0
+  index: -1
+shuffle-2
+  rotate: false
+  xy: 108, 76
+  size: 104, 105
+  orig: 104, 105
+  offset: 0, 0
+  index: -1
+shuffle-3
+  rotate: false
+  xy: 214, 76
+  size: 104, 105
+  orig: 104, 105
+  offset: 0, 0
+  index: -1
+shuffle-4
+  rotate: false
+  xy: 320, 76
+  size: 104, 105
+  orig: 104, 105
+  offset: 0, 0
+  index: -1
+shuffle-5
+  rotate: false
+  xy: 426, 76
+  size: 104, 105
+  orig: 104, 105
   offset: 0, 0
   index: -1
 table-background
   rotate: false
-  xy: 2, 76
+  xy: 2, 749
   size: 1008, 273
   orig: 1008, 273
+  offset: 0, 0
+  index: -1
+
+gameplay2.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+2shuffle-1
+  rotate: false
+  xy: 804, 774
+  size: 195, 195
+  orig: 195, 195
+  offset: 0, 0
+  index: -1
+3shuffle-1
+  rotate: false
+  xy: 2, 98
+  size: 194, 195
+  orig: 194, 195
+  offset: 0, 0
+  index: -1
+3shuffle-2
+  rotate: false
+  xy: 804, 577
+  size: 194, 195
+  orig: 194, 195
+  offset: 0, 0
+  index: -1
+3shuffle-3
+  rotate: false
+  xy: 198, 98
+  size: 194, 195
+  orig: 194, 195
+  offset: 0, 0
+  index: -1
+3shuffle-4
+  rotate: false
+  xy: 804, 380
+  size: 194, 195
+  orig: 194, 195
+  offset: 0, 0
+  index: -1
+3shuffle-5
+  rotate: false
+  xy: 436, 172
+  size: 194, 195
+  orig: 194, 195
+  offset: 0, 0
+  index: -1
+3shuffle-6
+  rotate: false
+  xy: 632, 172
+  size: 194, 195
+  orig: 194, 195
+  offset: 0, 0
+  index: -1
+background
+  rotate: false
+  xy: 2, 369
+  size: 800, 600
+  orig: 800, 600
+  offset: 0, 0
+  index: -1
+dice-6
+  rotate: false
+  xy: 2, 2
+  size: 94, 94
+  orig: 94, 94
+  offset: 0, 0
+  index: -1
+dice-settings
+  rotate: false
+  xy: 98, 2
+  size: 94, 94
+  orig: 94, 94
+  offset: 0, 0
+  index: -1
+dice-x
+  rotate: false
+  xy: 194, 2
+  size: 94, 94
+  orig: 94, 94
+  offset: 0, 0
+  index: -1
+settings-label
+  rotate: false
+  xy: 2, 295
+  size: 432, 72
+  orig: 432, 72
+  offset: 0, 0
+  index: -1
+shuffle-6
+  rotate: false
+  xy: 290, 2
+  size: 94, 94
+  orig: 94, 94
   offset: 0, 0
   index: -1
 
@@ -156,22 +240,28 @@ size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
 repeat: none
-settings-label
+plain-background
   rotate: false
   xy: 2, 2
-  size: 432, 72
-  orig: 432, 72
-  offset: 0, 0
-  index: -1
-simple-background
-  rotate: false
-  xy: 2, 76
   size: 800, 600
   orig: 800, 600
   offset: 0, 0
   index: -1
 
 gameplay4.png
+size: 1024, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+simple-background
+  rotate: false
+  xy: 2, 2
+  size: 800, 600
+  orig: 800, 600
+  offset: 0, 0
+  index: -1
+
+gameplay5.png
 size: 1024, 1024
 format: RGBA8888
 filter: Nearest, Nearest
