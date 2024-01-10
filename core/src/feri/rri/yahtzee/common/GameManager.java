@@ -12,11 +12,13 @@ public class GameManager {
 
     private static final String SOUND_PREF = "soundPref";
     private static final String MUSIC_PREF = "musicPref";
+    private static final String SKIN_PREF = "skinPref";
 
     private final Preferences PREFS;
     private Boolean soundOn = true;
     private Boolean musicOn = true;
     private Music backgroundMusic;
+    private Integer _skin;
 
     public void setBackgroundMusic(Music backgroundMusic) {
         this.backgroundMusic = backgroundMusic;
@@ -32,6 +34,7 @@ public class GameManager {
         PREFS = Gdx.app.getPreferences(Yahtzee.class.getSimpleName());
         musicOn = PREFS.getBoolean(MUSIC_PREF,true);
         soundOn = PREFS.getBoolean(SOUND_PREF,true);
+        _skin = PREFS.getInteger(SKIN_PREF,1);
     }
 
 
@@ -55,4 +58,11 @@ public class GameManager {
         PREFS.flush();
     }
 
+    public Integer getSkinPref(){return _skin;}
+
+    public void setSkinPref(Integer skin) {
+        _skin = skin;
+        PREFS.putInteger(SKIN_PREF, skin);
+        PREFS.flush();
+    }
 }

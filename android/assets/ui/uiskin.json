@@ -89,6 +89,9 @@
     },
     alt-label: {
       font: light-font
+    },
+    "small": {
+      "font": light-font-small
     }
   },
   com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {

@@ -6,91 +6,91 @@ filter: Nearest, Nearest
 repeat: none
 beige-dark
   rotate: false
-  xy: 518, 121
+  xy: 518, 129
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 beige-light
   rotate: false
-  xy: 478, 86
+  xy: 309, 94
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 check-off
   rotate: false
-  xy: 247, 2
-  size: 114, 114
-  orig: 114, 114
+  xy: 247, 64
+  size: 60, 60
+  orig: 60, 60
   offset: 0, 0
   index: -1
 check-on
   rotate: false
-  xy: 363, 2
-  size: 113, 114
-  orig: 113, 114
+  xy: 247, 2
+  size: 60, 60
+  orig: 60, 60
   offset: 0, 0
   index: -1
 cursor
   rotate: false
-  xy: 2, 16
+  xy: 2, 24
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
   index: -1
 dark
   rotate: false
-  xy: 803, 165
+  xy: 803, 173
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
   index: -1
 default
   rotate: false
-  xy: 2, 118
+  xy: 2, 126
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
 default-round
   rotate: false
-  xy: 2, 23
+  xy: 2, 31
   size: 243, 93
   orig: 243, 93
   offset: 0, 0
   index: -1
 default-round-down
   rotate: false
-  xy: 518, 153
+  xy: 518, 161
   size: 243, 93
   orig: 243, 93
   offset: 0, 0
   index: -1
 default-round-large
   rotate: false
-  xy: 763, 66
+  xy: 763, 74
   size: 38, 180
   orig: 38, 180
   offset: 0, 0
   index: -1
 default-scroll
   rotate: false
-  xy: 803, 170
+  xy: 803, 178
   size: 34, 76
   orig: 34, 76
   offset: 0, 0
   index: -1
 font-light
   rotate: false
-  xy: 260, 118
+  xy: 260, 126
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
 white
   rotate: false
-  xy: 839, 243
+  xy: 839, 251
   size: 3, 3
   orig: 3, 3
   offset: 0, 0

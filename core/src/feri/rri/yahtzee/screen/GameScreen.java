@@ -104,7 +104,6 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        RegionNames.setSkin2();
         viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
         hudViewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
 
