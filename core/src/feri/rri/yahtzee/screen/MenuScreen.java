@@ -96,7 +96,6 @@ public class MenuScreen extends ScreenAdapter {
         if (GameManager.INSTANCE.getMusicPref()) {
             GameManager.INSTANCE.getBackgroundMusic().play();
         }
-//        GameManager.INSTANCE.setPlayerName("");
         if (GameManager.INSTANCE.getPlayerName() == "" || GameManager.INSTANCE.getPlayerName().isEmpty()) {
             final Dialog dialog = new Dialog("", skin, "dialog");
             final Label inst = new Label("Enter Player Name",skin);
@@ -104,7 +103,7 @@ public class MenuScreen extends ScreenAdapter {
             dialog.setBackground(new TextureRegionDrawable(menuBackgroundRegion));
             final TextField textField = new TextField("", skin);
             TextButton okButton = new TextButton("OK", skin);
-            okButton.setPosition(50f,50f);
+            okButton.setPosition(50f,70f);
             okButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
