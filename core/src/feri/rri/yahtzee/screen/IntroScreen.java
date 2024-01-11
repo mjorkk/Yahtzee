@@ -57,6 +57,7 @@ public class IntroScreen extends ScreenAdapter {
         gameplayAtlas = assetManager.get(AssetDescriptors.GAMEPLAY);
         background = new Image(gameplayAtlas.findRegion(RegionNames.BACKGROUND));
         background.setFillParent(true);
+
         dice = new Image(gameplayAtlas.findRegion(RegionNames.DICE_1)); // Initialize dice here
         dice.setOrigin(Align.center);
         stage.addActor(background);

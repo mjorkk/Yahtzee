@@ -1,5 +1,7 @@
 package feri.rri.yahtzee.screen;
 
+import static feri.rri.yahtzee.assets.RegionNames.TABLE_BACKGROUND;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
@@ -10,13 +12,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -90,6 +96,28 @@ public class MenuScreen extends ScreenAdapter {
         if (GameManager.INSTANCE.getMusicPref()) {
             GameManager.INSTANCE.getBackgroundMusic().play();
         }
+        GameManager.INSTANCE.setPlayerName("");
+        if (GameManager.INSTANCE.getPlayerName() == "" || GameManager.INSTANCE.getPlayerName().isEmpty()) {
+            final Dialog dialog = new Dialog("", skin, "dialog");
+            final Label inst = new Label("Enter Player Name",skin);
+            TextureRegion menuBackgroundRegion = gameplayAtlas.findRegion(TABLE_BACKGROUND);
+            dialog.setBackground(new TextureRegionDrawable(menuBackgroundRegion));
+            final TextField textField = new TextField("", skin);
+            TextButton okButton = new TextButton("OK", skin);
+            okButton.setPosition(50f,50f);
+            okButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    GameManager.INSTANCE.setPlayerName(textField.getText());
+                    dialog.hide();
+                }
+            });
+            dialog.getContentTable().add(inst).row();
+            dialog.getContentTable().add(textField).width(400f);
+            dialog.getButtonTable().add(okButton).padBottom(10f).width(150f).height(80f);
+            dialog.show(stage).setSize(500f,300f);
+            dialog.setPosition((viewport.getWorldWidth() - dialog.getWidth()) / 2f, (viewport.getWorldHeight() - dialog.getHeight()) / 2f);
+        }
     }
 
     @Override
@@ -99,7 +127,7 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(165/255f, 150/255f, 136/255f, 1);
+        Gdx.gl.glClearColor(165 / 255f, 150 / 255f, 136 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(delta);
         stage.draw();
@@ -139,7 +167,6 @@ public class MenuScreen extends ScreenAdapter {
                 game.setScreen(new ScoresScreen(game));
             }
         });
-
 
 
         Table buttonTable = new Table();

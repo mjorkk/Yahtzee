@@ -74,6 +74,16 @@
       downFontColor: white
     }
   },
+  com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+    default: {
+      background: default-round,
+      titleFont: default-font
+    },
+    "dialog": {
+      background: default-round,
+      titleFont: light-font
+    }
+  },
   com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
     default: {
       checkboxOn: check-on,

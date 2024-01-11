@@ -3,7 +3,11 @@ package feri.rri.yahtzee.common;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 
+import feri.rri.yahtzee.GameResult;
 import feri.rri.yahtzee.Yahtzee;
 
 public class GameManager {
@@ -21,6 +25,10 @@ public class GameManager {
     private Integer _skin;
     private static final String LUCK_TEST_PREF = "luckTestPref";
     private Boolean luckTestOn;
+    private Array<GameResult> gameResults;
+    private String playerName;
+
+
 
     public void setBackgroundMusic(Music backgroundMusic) {
         this.backgroundMusic = backgroundMusic;
@@ -38,6 +46,10 @@ public class GameManager {
         soundOn = PREFS.getBoolean(SOUND_PREF,true);
         _skin = PREFS.getInteger(SKIN_PREF,1);
         luckTestOn = PREFS.getBoolean(LUCK_TEST_PREF, false);
+        gameResults = new Array<>();
+        playerName = PREFS.getString("playerName", "");
+        loadGameResults();
+
     }
 
 
@@ -75,6 +87,31 @@ public class GameManager {
     public void setLuckTestPref(Boolean state) {
         luckTestOn = state;
         PREFS.putBoolean(LUCK_TEST_PREF, state);
+        PREFS.flush();
+    }
+
+    private void loadGameResults() {
+        FileHandle file = Gdx.files.local("game_results.json");
+        if (file.exists()) {
+            Json json = new Json();
+            gameResults = json.fromJson(Array.class, GameResult.class, file.readString());
+        }
+    }
+
+    public void saveGameResult(GameResult result) {
+        gameResults.add(result);
+        Json json = new Json();
+        String gameResultsJson = json.toJson(gameResults, Array.class, GameResult.class);
+        Gdx.files.local("game_results.json").writeString(gameResultsJson, false);
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+        PREFS.putString("playerName", playerName);
         PREFS.flush();
     }
 
