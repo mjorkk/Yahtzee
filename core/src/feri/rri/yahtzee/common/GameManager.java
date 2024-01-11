@@ -25,7 +25,7 @@ public class GameManager {
     private Integer _skin;
     private static final String LUCK_TEST_PREF = "luckTestPref";
     private Boolean luckTestOn;
-    private Array<GameResult> gameResults;
+    private static Array<GameResult> gameResults;
     private String playerName;
 
 
@@ -98,7 +98,7 @@ public class GameManager {
         }
     }
 
-    public void saveGameResult(GameResult result) {
+    public static void saveGameResult(GameResult result) {
         gameResults.add(result);
         Json json = new Json();
         String gameResultsJson = json.toJson(gameResults, Array.class, GameResult.class);

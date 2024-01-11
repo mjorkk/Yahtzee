@@ -14,6 +14,7 @@ public class GameResult {
         this.timestamp = getCurrentTimestamp();
     }
 
+    public GameResult() {}
     private String getCurrentTimestamp() {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
     }

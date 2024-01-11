@@ -3,6 +3,7 @@ package feri.rri.yahtzee.screen;
         import com.badlogic.gdx.Gdx;
         import com.badlogic.gdx.ScreenAdapter;
         import com.badlogic.gdx.assets.AssetManager;
+        import com.badlogic.gdx.files.FileHandle;
         import com.badlogic.gdx.graphics.GL20;
         import com.badlogic.gdx.graphics.g2d.TextureAtlas;
         import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -21,14 +22,18 @@ package feri.rri.yahtzee.screen;
         import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
         import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
         import com.badlogic.gdx.utils.Align;
+        import com.badlogic.gdx.utils.Array;
+        import com.badlogic.gdx.utils.Json;
         import com.badlogic.gdx.utils.ScreenUtils;
         import com.badlogic.gdx.utils.viewport.FitViewport;
         import com.badlogic.gdx.utils.viewport.Viewport;
 
         import java.util.ArrayList;
         import java.util.Collections;
+        import java.util.Comparator;
         import java.util.List;
 
+        import feri.rri.yahtzee.GameResult;
         import feri.rri.yahtzee.Yahtzee;
         import feri.rri.yahtzee.assets.AssetDescriptors;
         import feri.rri.yahtzee.assets.RegionNames;
@@ -112,19 +117,23 @@ public class ScoresScreen extends ScreenAdapter {
     private Actor createUi() {
         Table table = new Table();
         table.defaults().pad(10);
+        FileHandle file = Gdx.files.local("game_results.json");
+        if (file.exists()) {
+            Json json = new Json();
+            Array<GameResult> gameResults = json.fromJson(Array.class, GameResult.class, file.readString());
 
-        List<Player> players = new ArrayList<>();
-        players.add(new Player("Pkgnrtihgiuerthgie oiteoirtjgietrg", 500));
-        players.add(new Player("Player 2", 450));
-        players.add(new Player("Player 3", 600));
-        for (int i = 4; i <= 20; i++) {
-            players.add(new Player("Player " + i, i * 50));
-        }
-        Collections.sort(players);
+            // Sort game results by score in descending order
+            gameResults.sort(new Comparator<GameResult>() {
+                @Override
+                public int compare(GameResult result1, GameResult result2) {
+                    return result2.getScore() - result1.getScore();
+                }
+            });
 
-        // Add sorted players to the table
-        for (Player player : players) {
-            addScoreRow(table, player);
+            // Add game results to the table
+            for (GameResult result : gameResults) {
+                addScoreRow(table, result);
+            }
         }
 
         // Create a scrollable window for the leaderboard
@@ -161,6 +170,25 @@ public class ScoresScreen extends ScreenAdapter {
 
     private int rankCounter = 1;
 
+    private void addScoreRow(Table table, GameResult result) {
+        Label rankLabel = new Label(String.valueOf(rankCounter++), skin);
+        rankLabel.setAlignment(Align.right);
+        TextField nameLabel = new TextField(result.getPlayerName(), skin);
+        nameLabel.setAlignment(Align.center);
+        nameLabel.setDisabled(true);
+
+        TextField scoreLabel = new TextField(String.valueOf(result.getScore()), skin);
+        scoreLabel.setAlignment(Align.center);
+        scoreLabel.setDisabled(true);
+
+        TextField timestampLabel = new TextField(result.getTimestamp(), skin);
+        timestampLabel.setAlignment(Align.center);
+        timestampLabel.setDisabled(true);
+        table.add(rankLabel);
+        table.add(nameLabel).expandX().fillX().height(70f);
+        table.add(scoreLabel).height(70f);
+        table.add(timestampLabel).expandX().fillX().height(70f).row();
+    }
     private void addScoreRow(Table table, Player player) {
         Label rankLabel = new Label(String.valueOf(rankCounter++), skin);
         rankLabel.setAlignment(Align.right);

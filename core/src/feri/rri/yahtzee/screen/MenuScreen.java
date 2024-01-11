@@ -96,7 +96,7 @@ public class MenuScreen extends ScreenAdapter {
         if (GameManager.INSTANCE.getMusicPref()) {
             GameManager.INSTANCE.getBackgroundMusic().play();
         }
-        GameManager.INSTANCE.setPlayerName("");
+//        GameManager.INSTANCE.setPlayerName("");
         if (GameManager.INSTANCE.getPlayerName() == "" || GameManager.INSTANCE.getPlayerName().isEmpty()) {
             final Dialog dialog = new Dialog("", skin, "dialog");
             final Label inst = new Label("Enter Player Name",skin);

@@ -36,6 +36,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.Random;
 
+import feri.rri.yahtzee.GameResult;
 import feri.rri.yahtzee.Yahtzee;
 import feri.rri.yahtzee.assets.AssetDescriptors;
 import feri.rri.yahtzee.assets.RegionNames;
@@ -240,6 +241,9 @@ public class GameScreen extends ScreenAdapter {
             alerts[1].setPosition(hudViewport.getWorldWidth() / 2f - alerts[1].getWidth() / 2f, hudViewport.getWorldHeight() / 3f * 2f - 70f);
             alerts[1].setVisible(true);
             rollDiceButton.setDisabled(true);
+            GameResult res = new GameResult(finalScore,GameManager.INSTANCE.getPlayerName());
+            GameManager.saveGameResult(res);
+
         }
     }
 
