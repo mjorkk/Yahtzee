@@ -2,6 +2,8 @@
 
 Welcome to the LibGDX Yahtzee game! This project allows you to experience the classic dice game Yahtzee in a digital format using the LibGDX framework. Whether you're a seasoned Yahtzee player or new to the game, this implementation provides an engaging and interactive experience.
 
+<img width="642" alt="image" src="https://github.com/3-letnik-UN-2023-2024/rri-my-second-game-mjorkk/assets/116105362/46b9181c-7aa7-49bb-aa5d-9ef1bf270aa9">
+
 ## Table of Contents
 
 - [Game Dynamics](#game-dynamics)
@@ -26,6 +28,9 @@ The dynamics of the Yahtzee game are designed to capture the essence of the clas
 ## Scoring Combinations
 - The game includes standard Yahtzee scoring combinations such as three of a kind, four of a kind, full house, small straight, large straight, and Yahtzee (five of a kind).
 - Players can also score points in the upper section by accumulating the sum of a specific number (1 to 6) multiplied by the number of dice showing that number.
+
+<img width="641" alt="image" src="https://github.com/3-letnik-UN-2023-2024/rri-my-second-game-mjorkk/assets/116105362/9ba67eba-faf9-45d2-ac0a-a1bbff0957d2">
+
 
 - Here are the scoring combinations available in the Yahtzee game:
 
@@ -55,13 +60,17 @@ The dynamics of the Yahtzee game are designed to capture the essence of the clas
 ## Game Elements
 
 ### User Interface
-- The game features an intuitive user interface with buttons for rolling the dice, selecting dice to reroll, and choosing scoring combinations.
+- The game features an intuitive user interface with buttons for rolling the dice, selecting dice to reroll, and choosing scoring combinations. You can choose between 3 skins for your game :
+<img width="264" alt="image" src="https://github.com/3-letnik-UN-2023-2024/rri-my-second-game-mjorkk/assets/116105362/b9f76cc9-67e9-40da-96db-2fda973f6c05">
+
 
 ### Scorecard
 - A digital scorecard displays the player's score for each category, making it easy to track progress.
 
 ### Dice Animation
 - Enjoy a visually appealing dice rolling animation, adding excitement to each turn.
+<img width="567" alt="image" src="https://github.com/3-letnik-UN-2023-2024/rri-my-second-game-mjorkk/assets/116105362/39759b87-2747-4ded-8999-ac476def49cb">
+
 
 ## How to Play
 
