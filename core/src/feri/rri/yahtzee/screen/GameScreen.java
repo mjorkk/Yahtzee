@@ -77,6 +77,7 @@ public class GameScreen extends ScreenAdapter {
     private final Label[] labelsUpper = new Label[7];
     private final Label[] labelsLower = new Label[7];
     private TextButton rollDiceButton;
+    private Integer rollLimit;
 
     private final TextField[] scoresUpper = new TextField[7];
     private final TextField[] scoresLower = new TextField[7];
@@ -100,6 +101,7 @@ public class GameScreen extends ScreenAdapter {
         assetManager.finishLoading();
         backgroundMusic = assetManager.get(AssetDescriptors.GAME_MUSIC);
         diceRollSound = assetManager.get(AssetDescriptors.DICE_ROLL);
+        rollLimit = GameManager.INSTANCE.getLuckTestPref() ? 2 : 3;
     }
 
     @Override
@@ -237,14 +239,14 @@ public class GameScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (rollDiceButton.isDisabled()) return;
-                if(GameManager.INSTANCE.getSoundPref()){
+                if (GameManager.INSTANCE.getSoundPref()) {
                     diceRollSound.play();
                 }
                 clearScores();
                 occurences.clear();
                 occurences.addAll(0, 0, 0, 0, 0, 0);
                 rollCount++;
-                if (rollCount == 3) {
+                if (rollCount == rollLimit) {
                     alerts[0].setVisible(true);
                     rollDiceButton.addAction(Actions.alpha(0.5f));
                 }
@@ -257,7 +259,7 @@ public class GameScreen extends ScreenAdapter {
                     @Override
                     public void run() {
                         updateScore();
-                        if (rollCount != 3) rollDiceButton.setDisabled(false);
+                        if (rollCount != rollLimit) rollDiceButton.setDisabled(false);
                         for (Image die : dice) {
                             die.setTouchable(Touchable.enabled);
                         }

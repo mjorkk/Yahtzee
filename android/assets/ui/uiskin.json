@@ -80,6 +80,11 @@
       checkboxOff: check-off,
       font: default-font,
       fontColor: white
+    },
+    "small": {
+      checkboxOn: check-on,
+      checkboxOff: check-off,
+      "font": light-font-small
     }
   },
   com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {

@@ -15,10 +15,12 @@ public class GameManager {
     private static final String SKIN_PREF = "skinPref";
 
     private final Preferences PREFS;
-    private Boolean soundOn = true;
-    private Boolean musicOn = true;
+    private Boolean soundOn;
+    private Boolean musicOn;
     private Music backgroundMusic;
     private Integer _skin;
+    private static final String LUCK_TEST_PREF = "luckTestPref";
+    private Boolean luckTestOn;
 
     public void setBackgroundMusic(Music backgroundMusic) {
         this.backgroundMusic = backgroundMusic;
@@ -35,6 +37,7 @@ public class GameManager {
         musicOn = PREFS.getBoolean(MUSIC_PREF,true);
         soundOn = PREFS.getBoolean(SOUND_PREF,true);
         _skin = PREFS.getInteger(SKIN_PREF,1);
+        luckTestOn = PREFS.getBoolean(LUCK_TEST_PREF, false);
     }
 
 
@@ -65,4 +68,14 @@ public class GameManager {
         PREFS.putInteger(SKIN_PREF, skin);
         PREFS.flush();
     }
+    public Boolean getLuckTestPref() {
+        return luckTestOn;
+    }
+
+    public void setLuckTestPref(Boolean state) {
+        luckTestOn = state;
+        PREFS.putBoolean(LUCK_TEST_PREF, state);
+        PREFS.flush();
+    }
+
 }

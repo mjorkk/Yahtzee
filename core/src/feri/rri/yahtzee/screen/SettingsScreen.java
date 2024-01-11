@@ -47,6 +47,7 @@ public class SettingsScreen extends ScreenAdapter {
     private Skin skin;
     private TextureAtlas gameplayAtlas;
 
+
     public SettingsScreen(Yahtzee game) {
         this.game = game;
         assetManager = game.getAssetManager();
@@ -104,6 +105,23 @@ public class SettingsScreen extends ScreenAdapter {
         TextureRegion backgroundRegion = gameplayAtlas.findRegion(RegionNames.DOTTED_BACKGROUND);
         table.setBackground(new TextureRegionDrawable(backgroundRegion));
 
+        final CheckBox luckTestCheckBox = new CheckBox("I'm feeling lucky!", uiSkin);
+
+        luckTestCheckBox.setChecked(GameManager.INSTANCE.getLuckTestPref());
+
+        luckTestCheckBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if(luckTestCheckBox.isChecked()){
+                    GameManager.INSTANCE.setLuckTestPref(true);
+                    luckTestCheckBox.setChecked(true);
+                }else {
+                    GameManager.INSTANCE.setLuckTestPref(false);
+                    luckTestCheckBox.setChecked(false);
+                }
+            }
+        });
+
 
         final CheckBox soundCheckBox = new CheckBox("Sound", uiSkin);
         final CheckBox musicCheckBox = new CheckBox("Music", uiSkin);
@@ -144,7 +162,8 @@ public class SettingsScreen extends ScreenAdapter {
 
         contentTable.setBackground(new TextureRegionDrawable(menuBackground));
         contentTable.add(skinOptions()).row();
-        contentTable.add(soundCheckBox).padTop(30f).row();
+        contentTable.add(luckTestCheckBox).padTop(20f).row();
+        contentTable.add(soundCheckBox).padTop(10f).row();
         contentTable.add(musicCheckBox).padTop(10f).row();
         contentTable.add(backButton).width(150f).padBottom(40f).padTop(20f).height(70f);
 
@@ -160,7 +179,7 @@ public class SettingsScreen extends ScreenAdapter {
         Table table = new Table();
         Skin uiSkin = assetManager.get(AssetDescriptors.UI_SKIN);
         Label instructionLabel = new Label("Choose a skin: ", uiSkin);
-        table.add(instructionLabel).colspan(3).padBottom(20f).row();
+        table.add(instructionLabel).colspan(3).padBottom(20f).padTop(20f).row();
         final ImageButton skin1Button = new ImageButton(new TextureRegionDrawable(gameplayAtlas.findRegion("shuffle-1")));
 
         final ImageButton skin2Button = new ImageButton(new TextureRegionDrawable(gameplayAtlas.findRegion("2shuffle-1")));
