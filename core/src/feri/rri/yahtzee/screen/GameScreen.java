@@ -135,9 +135,12 @@ public class GameScreen extends ScreenAdapter {
 
     private Actor createAlerts() {
         alerts[0] = new Label("Choose your move!", skin, "alt-label");
-        alerts[1] = new Label("CONGRATULATIONS! Your final score is ", skin);
+        alerts[1] = new Label("CONGRATULATIONS! Your final score is ", skin, "alt-label");
         alerts[0].setPosition(hudViewport.getWorldWidth() / 2f - alerts[0].getWidth() / 2f, hudViewport.getWorldHeight() / 3f * 2f - 70f);
+        alerts[1].setPosition(hudViewport.getWorldWidth() / 2f - alerts[1].getWidth() / 2f, hudViewport.getWorldHeight() / 3f * 2f - 70f);
         alerts[0].setVisible(false);
+        hudStage.addActor(alerts[1]);
+        alerts[1].setVisible(false);
         return alerts[0];
     }
 
@@ -208,11 +211,13 @@ public class GameScreen extends ScreenAdapter {
             dice[i].addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    isLocked[index] = !isLocked[index];
-                    if (isLocked[index]) {
-                        dice[index].addAction(Actions.alpha(0.5f));
-                    } else {
-                        dice[index].addAction(Actions.alpha(1f));
+                    if(rollCount!=0) {
+                        isLocked[index] = !isLocked[index];
+                        if (isLocked[index]) {
+                            dice[index].addAction(Actions.alpha(0.5f));
+                        } else {
+                            dice[index].addAction(Actions.alpha(1f));
+                        }
                     }
                 }
             });
@@ -228,8 +233,14 @@ public class GameScreen extends ScreenAdapter {
         return table;
     }
 
-    private boolean checkForEnd() {
-        return (combLeft == 0);
+    private void checkForEnd() {
+        if (combLeft <= 0) {
+            alerts[0].setVisible(false);
+            alerts[1].setText(alerts[1].getText() + String.valueOf(finalScore));
+            alerts[1].setPosition(hudViewport.getWorldWidth() / 2f - alerts[1].getWidth() / 2f, hudViewport.getWorldHeight() / 3f * 2f - 70f);
+            alerts[1].setVisible(true);
+            rollDiceButton.setDisabled(true);
+        }
     }
 
 
@@ -288,10 +299,11 @@ public class GameScreen extends ScreenAdapter {
                 public void clicked(InputEvent event, float x, float y) {
                     final TextField textField = (TextField) event.getTarget();
                     String text = textField.getText();
-                    if (text.isEmpty()) {
+                    if (text.isEmpty() && rollCount != 0) {
                         Dialog dialog = new Dialog("Confirm", skin) {
                             protected void result(Object object) {
                                 if ((Boolean) object) {
+                                    scoresUpper[finalI].addAction(Actions.alpha(0.5f));
                                     scores.set(finalI, 0);
                                     textField.setText("0");
                                     setScore();
@@ -302,8 +314,9 @@ public class GameScreen extends ScreenAdapter {
                         dialog.button("Yes", true);
                         dialog.button("No", false);
                         dialog.show(hudStage);
-                    } else {
+                    } else if (rollCount != 0) {
                         if (scores.get(finalI) == -1) {
+                            scoresUpper[finalI].addAction(Actions.alpha(0.5f));
                             int score = Integer.parseInt(text);
                             scores.set(finalI, score);
                             finalScore += score;
@@ -319,6 +332,7 @@ public class GameScreen extends ScreenAdapter {
                     clearScores();
                     alerts[0].setVisible(false);
                     rollDiceButton.addAction(Actions.alpha(1f));
+                    checkForEnd();
                 }
             });
             table.add(labelsUpper[i]).expandX().pad(5f).left();
@@ -347,6 +361,7 @@ public class GameScreen extends ScreenAdapter {
                         Dialog dialog = new Dialog("Confirm", skin) {
                             protected void result(Object object) {
                                 if ((Boolean) object) {
+                                    scoresLower[finalI].addAction(Actions.alpha(0.5f));
                                     scores.set(finalI + 7, 0);
                                     textField.setText("0");
                                     setScore();
@@ -359,6 +374,7 @@ public class GameScreen extends ScreenAdapter {
                         dialog.show(hudStage);
                     } else if (rollCount != 0) {
                         if (scores.get(finalI + 7) == -1) {
+                            scoresLower[finalI].addAction(Actions.alpha(0.5f));
                             int score = Integer.parseInt(text);
                             scores.set(finalI + 7, score);
                             finalScore += score;
@@ -374,6 +390,7 @@ public class GameScreen extends ScreenAdapter {
                     clearScores();
                     alerts[0].setVisible(false);
                     rollDiceButton.addAction(Actions.alpha(1f));
+                    checkForEnd();
                 }
             });
             table.add(labelsLower[i]).expandX().pad(5f).left();
@@ -402,12 +419,6 @@ public class GameScreen extends ScreenAdapter {
     }
 
     public void updateScore() {
-        if (checkForEnd()) {
-            alerts[0].setVisible(false);
-            alerts[1].setText(alerts[1].getText() + String.valueOf(finalScore));
-            alerts[1].setVisible(true);
-            return;
-        }
         countOccurences();
         for (int i = 0; i < occurences.size; i++) {
             int score = (i + 1) * occurences.get(i);
@@ -477,6 +488,11 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void clearScores() {
+        if (rollCount == 0)
+            for (int i = 0; i < 5; i++) {
+                dice[i].addAction(Actions.alpha(1f));
+                isLocked[i] = false;
+            }
         for (int i = 0; i < 14; i++) {
             if (scores.get(i) >= 0) continue;
             if (i >= 7) scoresLower[i % 7].setText("");
