@@ -103,6 +103,12 @@ public class GameScreen extends ScreenAdapter {
         backgroundMusic = assetManager.get(AssetDescriptors.GAME_MUSIC);
         diceRollSound = assetManager.get(AssetDescriptors.DICE_ROLL);
         rollLimit = GameManager.INSTANCE.getLuckTestPref() ? 2 : 3;
+        if(GameManager.INSTANCE.getSkinPref()==1){
+            RegionNames.setSkin1();
+        }else if(GameManager.INSTANCE.getSkinPref()==2)
+            RegionNames.setSkin2();
+        else
+            RegionNames.setSkin3();
     }
 
     @Override
