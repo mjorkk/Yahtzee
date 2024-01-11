@@ -304,23 +304,16 @@ public class GameScreen extends ScreenAdapter {
                     final TextField textField = (TextField) event.getTarget();
                     String text = textField.getText();
                     if (text.isEmpty() && rollCount != 0) {
-                        final Dialog dialog = new Dialog("", skin,"dialog") {
-                            protected void result(Object object) {
-                                if ((Boolean) object) {
-
-                                }
-                            }
-                        };
+                        final Dialog dialog = new Dialog("", skin,"dialog");
                         TextureRegion menuBackgroundRegion = gameplayAtlas.findRegion(TABLE_BACKGROUND);
                         dialog.setBackground(new TextureRegionDrawable(menuBackgroundRegion));
                         final Label inst = new Label("Score 0 in category?",skin);
 
                         dialog.getContentTable().add(inst).row();
                         TextButton okButton = new TextButton("Yes", skin);
-                        TextButton cancelButton = new TextButton("Cancel", skin);
-                        dialog.getContentTable().add(okButton).expandX().fillX().padBottom(10f).width(100f).height(60f);
-                        dialog.getContentTable().add(cancelButton).expandX().fillX().padBottom(10f).width(100f).height(60f).row();
-                        okButton.setPosition(50f,70f);
+                        TextButton cancelButton = new TextButton("No", skin);
+                        dialog.getContentTable().add(okButton).padBottom(10f).width(100f).height(60f).row();
+                        dialog.getContentTable().add(cancelButton).padBottom(10f).width(100f).height(60f).row();
                         okButton.addListener(new ClickListener() {
                             @Override
                             public void clicked(InputEvent event, float x, float y) {
@@ -328,6 +321,7 @@ public class GameScreen extends ScreenAdapter {
                                 scores.set(finalI, 0);
                                 textField.setText("0");
                                 setScore();
+                                dialog.hide();
                             }
                         });
                         cancelButton.addListener((new ClickListener(){
@@ -337,7 +331,6 @@ public class GameScreen extends ScreenAdapter {
                             }
                         }));
                         dialog.show(hudStage).setSize(500f,300f);
-
                         dialog.setPosition((hudViewport.getWorldWidth() - dialog.getWidth()) / 2f, (hudViewport.getWorldHeight() - dialog.getHeight()) / 2f);
 
                     } else if (rollCount != 0) {
@@ -384,23 +377,35 @@ public class GameScreen extends ScreenAdapter {
                     final TextField textField = (TextField) event.getTarget();
                     String text = textField.getText();
                     if (text.isEmpty() && rollCount != 0) {
-                        Dialog dialog = new Dialog("", skin,"dialog") {
-                            protected void result(Object object) {
-                                if ((Boolean) object) {
-                                    scoresLower[finalI].addAction(Actions.alpha(0.5f));
-                                    scores.set(finalI + 7, 0);
-                                    textField.setText("0");
-                                    setScore();
-                                }
-                            }
-                        };
+                        final Dialog dialog = new Dialog("", skin,"dialog");
                         TextureRegion menuBackgroundRegion = gameplayAtlas.findRegion(TABLE_BACKGROUND);
                         dialog.setBackground(new TextureRegionDrawable(menuBackgroundRegion));
-                        final Label inst = new Label("Score 0 in category?",skin, "small");
-                        dialog.getContentTable().add(inst).width(70f).row();
-                        dialog.button("Yes", true);
-                        dialog.button("No", false);
-                        dialog.show(hudStage).setSize(600f,400f);
+                        final Label inst = new Label("Score 0 in category?",skin);
+
+                        dialog.getContentTable().add(inst).row();
+                        TextButton okButton = new TextButton("Yes", skin);
+                        TextButton cancelButton = new TextButton("No", skin);
+                        dialog.getContentTable().add(okButton).padBottom(10f).width(100f).height(60f).row();
+                        dialog.getContentTable().add(cancelButton).padBottom(10f).width(100f).height(60f).row();
+                        okButton.addListener(new ClickListener() {
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+                                scoresLower[finalI].addAction(Actions.alpha(0.5f));
+                                scores.set(finalI+7, 0);
+                                textField.setText("0");
+                                setScore();
+                                dialog.hide();
+                            }
+                        });
+                        cancelButton.addListener((new ClickListener(){
+                            @Override
+                            public void clicked(InputEvent event, float x, float y) {
+                                dialog.hide();
+                            }
+                        }));
+                        dialog.show(hudStage).setSize(500f,300f);
+                        dialog.setPosition((hudViewport.getWorldWidth() - dialog.getWidth()) / 2f, (hudViewport.getWorldHeight() - dialog.getHeight()) / 2f);
+
                     } else if (rollCount != 0) {
                         if (scores.get(finalI + 7) == -1) {
                             scoresLower[finalI].addAction(Actions.alpha(0.5f));

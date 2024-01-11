@@ -122,7 +122,6 @@ public class SettingsScreen extends ScreenAdapter {
             }
         });
 
-
         final CheckBox soundCheckBox = new CheckBox("Sound", uiSkin);
         final CheckBox musicCheckBox = new CheckBox("Music", uiSkin);
 

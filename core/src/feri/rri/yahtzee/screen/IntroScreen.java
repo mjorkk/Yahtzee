@@ -24,7 +24,7 @@ import feri.rri.yahtzee.config.GameConfig;
 
 public class IntroScreen extends ScreenAdapter {
 
-    public static final float INTRO_DURATION_IN_SEC = 1f;   // duration of the (intro) animation
+    public static final float INTRO_DURATION_IN_SEC = 3.5f;   // duration of the (intro) animation
 
     private final Yahtzee game;
     private final AssetManager assetManager;
